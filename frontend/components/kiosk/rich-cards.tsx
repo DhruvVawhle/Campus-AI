@@ -278,7 +278,7 @@ export function WayfindingCard({ location, title, qrUri, onOpenDrawer }: Wayfind
           <span className="text-xs font-semibold text-secondary">{location.floor}</span>
         </div>
 
-        <svg viewBox="0 0 420 180" className="w-full h-38 select-none" role="img" aria-label="Campus floor plan route">
+        <svg viewBox="0 0 420 180" className="w-full h-32 sm:h-36 max-h-[140px] select-none" role="img" aria-label="Campus floor plan route">
           <title>Campus Floor Plan Route Map</title>
           <defs>
             <pattern id="floorGrid" width="20" height="20" patternUnits="userSpaceOnUse">

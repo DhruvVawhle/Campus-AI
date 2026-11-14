@@ -83,6 +83,7 @@ export function KioskShell() {
   const [deskBellNotified, setDeskBellNotified] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<SLRTCEDepartmentCategory>("all");
   const [admissionQrOpen, setAdmissionQrOpen] = useState(false);
+  const [mobileTab, setMobileTab] = useState<"directory" | "assistant">("assistant");
 
   // Real-time live interim STT transcription & mic permission
   const [liveInterim, setLiveInterim] = useState("");
@@ -99,6 +100,7 @@ export function KioskShell() {
 
   // Chat container reference for smooth auto-scrolling
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatScrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Synchronized second-accurate kiosk clock: "Sat, Nov 14 • 08:00 PM"
   const [timeFormatted, setTimeFormatted] = useState("");
@@ -200,6 +202,7 @@ export function KioskShell() {
     // Match grounded SLRTCE knowledge record
     const matched = findSLRTCERecord(clean);
     setActiveRecord(matched);
+    setMobileTab("assistant");
 
     if (demoMode || backendOnline === false) {
       let responseText = "I have checked the SLRTCE campus directory. Please specify faculty cabin, admission eligibility, or examination schedules.";
@@ -378,10 +381,16 @@ export function KioskShell() {
     };
   }, [demoMode]);
 
-  // Auto-scroll chat feed to bottom on new replies
+  // Ensure the new assistant answer is immediately visible at the top of the chat area
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [conversation.reply, conversation.transcript, activeRecord]);
+    if (conversation.reply) {
+      if (chatScrollContainerRef.current) {
+        chatScrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else if (conversation.transcript || liveInterim) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [conversation.reply, conversation.transcript, liveInterim, activeRecord]);
 
   const handleLanguageChange = (newLang: LanguageCode) => {
     interruptSpeakingIfActive();
@@ -599,11 +608,38 @@ export function KioskShell() {
         </div>
       </header>
 
+      {/* Mobile/Tablet Viewport Segmented Switcher (< 1024px) */}
+      <div className="lg:hidden px-3.5 pt-2 pb-0 shrink-0">
+        <div className="flex bg-surface rounded-lg p-1 border border-line shadow-2xs">
+          <button
+            type="button"
+            onClick={() => setMobileTab("directory")}
+            className={`flex-1 min-h-[38px] text-xs font-bold rounded-md transition-colors cursor-pointer ${
+              mobileTab === "directory" ? "bg-slrtce-navy text-white shadow-2xs" : "text-secondary hover:text-ink"
+            }`}
+          >
+            {t.directoryHeading}
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileTab("assistant")}
+            className={`flex-1 min-h-[38px] text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer ${
+              mobileTab === "assistant" ? "bg-slrtce-maroon text-white shadow-2xs" : "text-secondary hover:text-ink"
+            }`}
+          >
+            <span>{t.liveAssistant}</span>
+            {hasActiveConversation && <span className="w-2 h-2 rounded-full bg-slrtce-gold animate-pulse" />}
+          </button>
+        </div>
+      </div>
+
       {/* 2. Main Kiosk Architectural Grid (grid-cols-12, 100dvh Lock) */}
       <main className="flex-1 p-3.5 lg:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3.5 min-h-0 overflow-hidden">
         
         {/* Left Sidebar: Campus Directory (col-span-4, flat structured panel) */}
-        <aside className="lg:col-span-4 bg-surface border border-line rounded-lg p-3.5 lg:p-4 flex flex-col justify-between min-h-0 h-full shadow-2xs">
+        <aside className={`lg:col-span-4 bg-surface border border-line rounded-lg p-3.5 lg:p-4 flex flex-col justify-between min-h-0 h-full shadow-2xs ${
+          mobileTab === "directory" ? "flex" : "hidden lg:flex"
+        }`}>
           
           <div>
             <div className="flex items-center justify-between pb-2 border-b border-line">
@@ -720,7 +756,9 @@ export function KioskShell() {
         </aside>
 
         {/* Right Main Panel: Interactive Dialogue Stage (col-span-8, flex flex-col) */}
-        <section className="lg:col-span-8 bg-surface border border-line rounded-lg p-3.5 lg:p-4 flex flex-col justify-between min-h-0 h-full shadow-2xs">
+        <section className={`lg:col-span-8 bg-surface border border-line rounded-lg p-3.5 lg:p-4 flex flex-col justify-between min-h-0 h-full shadow-2xs ${
+          mobileTab === "assistant" ? "flex" : "hidden lg:flex"
+        }`}>
           
           {/* Panel Header */}
           <div className="flex items-center justify-between pb-2 border-b border-line shrink-0 min-h-[46px]">
@@ -768,7 +806,7 @@ export function KioskShell() {
           </div>
 
           {/* Dialogue Area: Seamless Stream (Hero Welcome State OR Active Clean Stream) */}
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 scroll-slim py-2 pr-1 select-text">
+          <div ref={chatScrollContainerRef} className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-3.5 scroll-slim py-2 pr-1 select-text overscroll-contain">
             {!hasActiveConversation ? (
               
               /* Hero Welcome State: Clean Architectural Layout (NO Card-in-Card, NO Uppercase Eyebrows) */
@@ -865,7 +903,7 @@ export function KioskShell() {
               <>
                 {/* Visitor Speech Bubble */}
                 {conversation.transcript && (
-                  <div className="self-end ml-auto bg-ground border border-line text-sm sm:text-base text-ink p-3.5 rounded-lg max-w-[85%] sm:max-w-[75%] shadow-2xs">
+                  <div className="self-end ml-auto bg-ground border border-line text-sm sm:text-base text-ink p-3.5 rounded-lg max-w-[90%] sm:max-w-[80%] shadow-2xs">
                     <div className="text-xs font-bold text-secondary mb-1">Visitor</div>
                     <div className="font-semibold leading-relaxed">{conversation.transcript}</div>
                   </div>
@@ -873,7 +911,7 @@ export function KioskShell() {
 
                 {/* Live Interim Streaming Indicator */}
                 {liveInterim && (
-                  <div className="self-end ml-auto bg-accent-surface border border-slrtce-maroon/30 text-sm sm:text-base text-slrtce-maroon p-3 rounded-lg max-w-[85%] font-medium animate-pulse">
+                  <div className="self-end ml-auto bg-accent-surface border border-slrtce-maroon/30 text-sm sm:text-base text-slrtce-maroon p-3 rounded-lg max-w-[90%] font-medium animate-pulse">
                     <span className="text-xs font-bold block text-slrtce-maroon mb-0.5">Transcribing live speech…</span>
                     {liveInterim}
                   </div>
@@ -889,13 +927,13 @@ export function KioskShell() {
 
                 {/* Assistant Speech Bubble: Crisp Surface with 1px Border (No thick border-l-4, No colored dot) */}
                 {conversation.reply && (
-                  <div className="self-start mr-auto bg-surface border border-line text-ink text-sm sm:text-base p-4 rounded-lg max-w-[96%] sm:max-w-[90%] space-y-3 shadow-2xs">
+                  <div className="self-start w-full max-w-full bg-surface border border-line text-ink p-4 sm:p-5 rounded-lg space-y-3.5 shadow-2xs">
                     <div className="flex items-center justify-between border-b border-line pb-1.5">
                       <span className="text-sm font-bold text-slrtce-maroon">CampusAI</span>
                       <span className="text-xs font-medium text-secondary">Mira Road, Mumbai</span>
                     </div>
 
-                    <div className="leading-relaxed font-medium text-ink">{conversation.reply}</div>
+                    <div className="leading-relaxed font-medium text-ink text-base sm:text-lg">{conversation.reply}</div>
 
                     {/* Structured Architectural Wayfinding Card */}
                     {activeRecord?.locationDetails && (
