@@ -135,7 +135,7 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
-    font-size: clamp(13px, 0.95vw, 16px);
+    font-size: clamp(14px, 1vw, 17px);
     overflow-x: clip;
     scroll-behavior: smooth;
   }
@@ -148,6 +148,9 @@
     overflow-x: clip;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.011em;
   }
 
   * {

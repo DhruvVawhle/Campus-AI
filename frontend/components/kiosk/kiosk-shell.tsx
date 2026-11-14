@@ -496,19 +496,19 @@ export function KioskShell() {
             onPointerDown={handleLogoPointerDown}
             onPointerUp={handleLogoPointerUp}
             onPointerLeave={handleLogoPointerUp}
-            className="flex items-baseline gap-2 text-xl font-black tracking-tight text-slrtce-maroon hover:opacity-90 focus-visible:outline-2 focus-visible:outline-slrtce-maroon rounded px-1 cursor-pointer"
+            className="flex items-baseline gap-2 text-2xl font-black tracking-tight text-slrtce-maroon hover:opacity-90 focus-visible:outline-2 focus-visible:outline-slrtce-maroon rounded px-1 cursor-pointer"
             title="CampusAI (Tap 5x for hardware diagnostics)"
             aria-label="CampusAI Home"
           >
             <span>CampusAI</span>
           </button>
 
-          <span className="text-xs font-semibold px-2.5 py-1 rounded bg-ground border border-line text-slrtce-navy">
+          <span className="text-xs sm:text-sm font-semibold px-3 py-1 rounded bg-ground border border-line text-slrtce-navy">
             {t.stationSubtitle}
           </span>
 
           {/* Time-Aware Operational Badge */}
-          <span className={`text-xs font-medium px-2.5 py-1 rounded hidden md:inline-flex items-center ${operationalNotice.class}`}>
+          <span className={`text-xs sm:text-sm font-semibold px-3 py-1 rounded hidden md:inline-flex items-center ${operationalNotice.class}`}>
             <span>{operationalNotice.text}</span>
           </span>
         </div>
@@ -521,15 +521,15 @@ export function KioskShell() {
             <button
               type="button"
               onClick={requestMicPermission}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-destructive-surface text-destructive border border-destructive/20 text-xs font-semibold hover:bg-destructive/15 transition-colors cursor-pointer"
+              className="min-h-[38px] flex items-center gap-1.5 px-3 py-1.5 rounded bg-destructive-surface text-destructive border border-destructive/20 text-xs sm:text-sm font-semibold hover:bg-destructive/15 transition-colors cursor-pointer"
               title="Microphone access is blocked by browser. Click to prompt permission."
             >
-              <FiMic className="w-3.5 h-3.5" />
+              <FiMic className="w-4 h-4" />
               <span>Mic Blocked</span>
             </button>
           ) : (
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-success-surface text-success border border-success/20 text-xs font-semibold">
-              <FiMic className="w-3.5 h-3.5" />
+            <div className="hidden sm:flex items-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded bg-success-surface text-success border border-success/20 text-xs sm:text-sm font-semibold">
+              <FiMic className="w-4 h-4" />
               <span>Mic Ready</span>
             </div>
           )}
@@ -542,24 +542,24 @@ export function KioskShell() {
               setSoundEnabled(!soundEnabled);
               playKioskSound("tap");
             }}
-            className="min-h-[36px] flex items-center gap-1.5 px-3 py-1 rounded bg-surface border border-line hover:bg-ground text-xs font-medium text-ink transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer"
+            className="min-h-[38px] flex items-center gap-1.5 px-3.5 py-1.5 rounded bg-surface border border-line hover:bg-ground text-xs sm:text-sm font-semibold text-ink transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer"
             aria-label={soundEnabled ? "Audio output enabled. Click to mute." : "Audio output muted. Click to enable."}
           >
             {soundEnabled ? (
-              <FiVolume2 className="w-3.5 h-3.5 text-slrtce-maroon shrink-0" aria-hidden="true" />
+              <FiVolume2 className="w-4 h-4 text-slrtce-maroon shrink-0" aria-hidden="true" />
             ) : (
-              <FiVolumeX className="w-3.5 h-3.5 text-secondary shrink-0" aria-hidden="true" />
+              <FiVolumeX className="w-4 h-4 text-secondary shrink-0" aria-hidden="true" />
             )}
             <span className="hidden sm:inline">{soundEnabled ? t.voiceOutputOn : t.voiceOutputMuted}</span>
           </button>
 
           {/* Engine Status Pill */}
-          <div className="min-h-[36px] flex items-center px-3 rounded bg-ground border border-line text-xs font-medium text-secondary">
+          <div className="min-h-[38px] flex items-center px-3.5 rounded bg-ground border border-line text-xs sm:text-sm font-semibold text-secondary">
             <span>{demoMode || backendOnline === false ? t.statusLocalActive : t.statusReady}</span>
           </div>
 
           {/* Precision Clock */}
-          <div className="hidden lg:flex items-center text-xs font-medium text-secondary pl-3 border-l border-line">
+          <div className="hidden lg:flex items-center text-xs sm:text-sm font-semibold text-secondary pl-3 border-l border-line tabular-nums">
             {timeFormatted}
           </div>
         </div>
@@ -569,14 +569,14 @@ export function KioskShell() {
       <main className="flex-1 p-3.5 lg:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3.5 min-h-0 overflow-hidden">
         
         {/* Left Sidebar: Campus Directory (col-span-4, flat structured panel) */}
-        <aside className="lg:col-span-4 bg-surface border border-line rounded-lg p-3.5 flex flex-col justify-between min-h-0 h-full shadow-2xs">
+        <aside className="lg:col-span-4 bg-surface border border-line rounded-lg p-3.5 lg:p-4 flex flex-col justify-between min-h-0 h-full shadow-2xs">
           
           <div>
             <div className="flex items-center justify-between pb-2 border-b border-line">
-              <h1 className="text-sm font-bold text-slrtce-navy">
+              <h1 className="text-base font-bold text-slrtce-navy">
                 {t.directoryHeading}
               </h1>
-              <span className="text-xs font-medium text-secondary">
+              <span className="text-xs font-semibold text-secondary">
                 Mira Road (E)
               </span>
             </div>
@@ -603,7 +603,7 @@ export function KioskShell() {
                       setSelectedCategory(cat.id);
                       playKioskSound("tap");
                     }}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon shrink-0 cursor-pointer ${
+                    className={`min-h-[36px] px-3 py-1.5 text-xs sm:text-sm font-bold rounded whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon shrink-0 cursor-pointer ${
                       isActive
                         ? "bg-slrtce-maroon text-white"
                         : "bg-surface text-secondary border border-line hover:bg-ground hover:text-ink"
@@ -617,7 +617,7 @@ export function KioskShell() {
           </div>
 
           {/* Directory Items with 2 Compact Lines (Fit all cleanly without inner scroll) */}
-          <nav className="flex-1 space-y-1.5 my-2.5 pr-0.5" aria-label="SLRTCE Directory Inquiries">
+          <nav className="flex-1 space-y-2 my-2.5 pr-0.5" aria-label="SLRTCE Directory Inquiries">
             {filteredDirectory.map((item) => {
               const isBusy = conversation.busy || voice.recording;
               return (
@@ -626,20 +626,20 @@ export function KioskShell() {
                   type="button"
                   onClick={() => !isBusy && executeQuery(item.prompt)}
                   disabled={isBusy}
-                  className="w-full px-3 py-2 rounded-lg border border-line bg-surface hover:bg-ground/70 hover:border-line-strong text-left transition-colors flex flex-col justify-center focus-visible:outline-2 focus-visible:outline-slrtce-maroon disabled:opacity-50 cursor-pointer"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-line bg-surface hover:bg-ground/70 hover:border-line-strong text-left transition-colors flex flex-col justify-center focus-visible:outline-2 focus-visible:outline-slrtce-maroon disabled:opacity-50 cursor-pointer"
                 >
                   {/* Line 1: Title + Floor Badge */}
                   <div className="flex items-center justify-between gap-1 w-full">
-                    <span className="text-xs font-bold text-ink truncate">{item.title}</span>
-                    <span className="text-[10px] font-semibold text-slrtce-navy bg-ground border border-line px-1.5 py-0.5 rounded shrink-0">
+                    <span className="text-sm font-bold text-ink truncate">{item.title}</span>
+                    <span className="text-xs font-semibold text-slrtce-navy bg-ground border border-line px-2 py-0.5 rounded shrink-0 tabular-nums">
                       {item.floorBadge}
                     </span>
                   </div>
                   
                   {/* Line 2: Role/Details + Room Tag */}
-                  <div className="flex items-center justify-between gap-1 text-[11px] text-secondary mt-0.5 w-full">
+                  <div className="flex items-center justify-between gap-1 text-xs text-secondary mt-0.5 w-full font-medium">
                     <span className="truncate">{item.subtitle}</span>
-                    <span className="text-[10px] font-medium text-slrtce-navy bg-ground px-1.5 py-0.5 rounded border border-line shrink-0">
+                    <span className="text-xs font-medium text-slrtce-navy bg-ground px-2 py-0.5 rounded border border-line shrink-0 tabular-nums">
                       {item.roomBadge}
                     </span>
                   </div>
@@ -650,8 +650,8 @@ export function KioskShell() {
 
           {/* Bottom Language Switcher */}
           <fieldset className="pt-2.5 border-t border-line">
-            <legend className="text-xs font-semibold text-secondary mb-1.5 flex items-center gap-1.5">
-              <FiGlobe className="w-3.5 h-3.5 text-slrtce-maroon" aria-hidden="true" />
+            <legend className="text-xs sm:text-sm font-bold text-secondary mb-1.5 flex items-center gap-1.5">
+              <FiGlobe className="w-4 h-4 text-slrtce-maroon" aria-hidden="true" />
               <span>{t.languageLabel}</span>
             </legend>
             
@@ -669,7 +669,7 @@ export function KioskShell() {
                   type="button"
                   onClick={() => handleLanguageChange(lCode.code)}
                   aria-pressed={lang === lCode.code}
-                  className={`flex-1 min-h-[32px] py-1 text-xs font-bold rounded transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer ${
+                  className={`flex-1 min-h-[38px] py-2 text-xs sm:text-sm font-bold rounded transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer ${
                     lang === lCode.code
                       ? "bg-slrtce-maroon text-white shadow-2xs"
                       : "text-secondary hover:text-ink hover:bg-surface"
@@ -687,7 +687,7 @@ export function KioskShell() {
         <section className="lg:col-span-8 bg-surface border border-line rounded-lg p-3.5 lg:p-4 flex flex-col justify-between min-h-0 h-full shadow-2xs">
           
           {/* Panel Header */}
-          <div className="flex items-center justify-between pb-2 border-b border-line shrink-0 min-h-[44px]">
+          <div className="flex items-center justify-between pb-2 border-b border-line shrink-0 min-h-[46px]">
             <div className="flex items-center gap-2.5">
               {hasActiveConversation ? (
                 <div
@@ -695,7 +695,7 @@ export function KioskShell() {
                   tabIndex={0}
                   role="button"
                   aria-label="CampusAI Assistant. Tap to interact."
-                  className="w-9 h-9 rounded-full bg-ground border border-line flex items-center justify-center overflow-hidden shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-slrtce-maroon"
+                  className="w-10 h-10 rounded-full bg-ground border border-line flex items-center justify-center overflow-hidden shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-slrtce-maroon"
                   title="Tap CampusAI to interact"
                 >
                   <CampusRobot state={conversation.state} distance={7.5} />
@@ -703,8 +703,8 @@ export function KioskShell() {
               ) : null}
               
               <div>
-                <span className="text-sm font-bold text-slrtce-navy block leading-tight">{t.liveAssistant}</span>
-                <span className="text-xs text-secondary font-medium">SLRTCE Campus Terminal</span>
+                <span className="text-base font-bold text-slrtce-navy block leading-tight">{t.liveAssistant}</span>
+                <span className="text-xs sm:text-sm text-secondary font-medium">SLRTCE Campus Terminal</span>
               </div>
             </div>
 
@@ -718,9 +718,9 @@ export function KioskShell() {
                   setActiveRecord(null);
                   setDeskBellNotified(false);
                 }}
-                className="text-xs font-semibold text-secondary hover:text-slrtce-maroon flex items-center gap-1.5 px-2.5 py-1 rounded border border-line hover:bg-ground transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer"
+                className="text-xs sm:text-sm font-semibold text-secondary hover:text-slrtce-maroon flex items-center gap-1.5 min-h-[36px] px-3 py-1 rounded border border-line hover:bg-ground transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer"
               >
-                <FiRotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
+                <FiRotateCcw className="w-4 h-4" aria-hidden="true" />
                 <span>{t.resetSession}</span>
               </button>
             )}
@@ -755,10 +755,10 @@ export function KioskShell() {
                   </div>
 
                   <div className="space-y-1.5 px-2">
-                    <h2 className="text-base sm:text-lg font-bold text-ink tracking-tight">
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-ink tracking-tight leading-tight">
                       Shree L. R. Tiwari College of Engineering
                     </h2>
-                    <p className="text-xs sm:text-sm text-secondary font-medium max-w-lg mx-auto leading-relaxed">
+                    <p className="text-sm sm:text-base text-secondary font-medium max-w-xl mx-auto leading-relaxed">
                       {t.welcomeGreeting}
                     </p>
                   </div>
@@ -766,7 +766,7 @@ export function KioskShell() {
 
                 {/* Microphone Blocked Warning Notice */}
                 {micPermitted === false && (
-                  <div className="w-full my-2 p-3 rounded bg-destructive-surface border border-destructive/20 flex items-center justify-between gap-3 text-xs font-medium text-destructive">
+                  <div className="w-full my-2 p-3 rounded bg-destructive-surface border border-destructive/20 flex items-center justify-between gap-3 text-xs sm:text-sm font-medium text-destructive">
                     <div className="flex items-center gap-2">
                       <FiAlertTriangle className="w-4 h-4 shrink-0" />
                       <span>Microphone access is blocked in your browser. Tap Enable Mic or select an inquiry below.</span>
@@ -774,7 +774,7 @@ export function KioskShell() {
                     <button
                       type="button"
                       onClick={requestMicPermission}
-                      className="px-2.5 py-1 rounded bg-destructive text-white font-semibold text-xs hover:opacity-90 shrink-0 cursor-pointer"
+                      className="min-h-[36px] px-3 py-1.5 rounded bg-destructive text-white font-bold text-xs sm:text-sm hover:opacity-90 shrink-0 cursor-pointer"
                     >
                       Enable Mic
                     </button>
@@ -783,7 +783,7 @@ export function KioskShell() {
 
                 {/* Touch Action Prompt Grid (No Eyebrows, Clean Semantic Hierarchy) */}
                 <div className="w-full mt-4 space-y-2">
-                  <div className="text-xs font-semibold text-secondary">
+                  <div className="text-sm sm:text-base font-bold text-slrtce-navy">
                     {t.suggestedHeading}
                   </div>
 
@@ -795,19 +795,19 @@ export function KioskShell() {
                           key={quick.label}
                           type="button"
                           onClick={() => executeQuery(quick.prompt)}
-                          className="p-3.5 rounded-lg border border-line bg-surface hover:border-slrtce-maroon hover:bg-ground/60 text-left transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer group flex flex-col justify-between min-h-[96px] shadow-2xs"
+                          className="p-4 rounded-lg border border-line bg-surface hover:border-slrtce-maroon hover:bg-ground/60 text-left transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer group flex flex-col justify-between min-h-[104px] shadow-2xs"
                         >
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-[11px] font-semibold text-slrtce-maroon">
+                            <span className="text-xs font-bold text-slrtce-maroon tracking-normal">
                               {quick.category}
                             </span>
                             <Icon className="w-4 h-4 text-secondary group-hover:text-slrtce-maroon transition-colors" />
                           </div>
                           <div>
-                            <div className="text-xs font-bold text-ink group-hover:text-slrtce-maroon leading-snug">
+                            <div className="text-sm sm:text-base font-bold text-ink group-hover:text-slrtce-maroon leading-snug">
                               {quick.label}
                             </div>
-                            <div className="text-[11px] text-secondary mt-1 leading-normal">
+                            <div className="text-xs sm:text-sm text-secondary mt-1 leading-normal font-medium">
                               {quick.subtitle}
                             </div>
                           </div>
@@ -825,23 +825,23 @@ export function KioskShell() {
               <>
                 {/* Visitor Speech Bubble */}
                 {conversation.transcript && (
-                  <div className="self-end ml-auto bg-ground border border-line text-xs sm:text-sm text-ink p-3 rounded-lg max-w-[85%] sm:max-w-[75%] shadow-2xs">
-                    <div className="text-[11px] text-secondary font-semibold mb-0.5">Visitor</div>
-                    <div className="font-semibold">{conversation.transcript}</div>
+                  <div className="self-end ml-auto bg-ground border border-line text-sm sm:text-base text-ink p-3.5 rounded-lg max-w-[85%] sm:max-w-[75%] shadow-2xs">
+                    <div className="text-xs font-bold text-secondary mb-1">Visitor</div>
+                    <div className="font-semibold leading-relaxed">{conversation.transcript}</div>
                   </div>
                 )}
 
                 {/* Live Interim Streaming Indicator */}
                 {liveInterim && (
-                  <div className="self-end ml-auto bg-accent-surface border border-slrtce-maroon/30 text-xs sm:text-sm text-slrtce-maroon p-2.5 rounded-lg max-w-[85%] font-medium animate-pulse">
-                    <span className="text-[10px] font-bold block text-slrtce-maroon">Transcribing live speech…</span>
+                  <div className="self-end ml-auto bg-accent-surface border border-slrtce-maroon/30 text-sm sm:text-base text-slrtce-maroon p-3 rounded-lg max-w-[85%] font-medium animate-pulse">
+                    <span className="text-xs font-bold block text-slrtce-maroon mb-0.5">Transcribing live speech…</span>
                     {liveInterim}
                   </div>
                 )}
 
                 {/* Processing Spinner */}
                 {conversation.state === "thinking" && (
-                  <div className="self-start text-xs font-semibold text-secondary flex items-center gap-2 px-1">
+                  <div className="self-start text-xs sm:text-sm font-semibold text-secondary flex items-center gap-2 px-1">
                     <Spinner />
                     <span>{t.processing}</span>
                   </div>
@@ -849,10 +849,10 @@ export function KioskShell() {
 
                 {/* Assistant Speech Bubble: Crisp Surface with 1px Border (No thick border-l-4, No colored dot) */}
                 {conversation.reply && (
-                  <div className="self-start mr-auto bg-surface border border-line text-ink text-xs sm:text-sm p-4 rounded-lg max-w-[96%] sm:max-w-[90%] space-y-3 shadow-2xs">
+                  <div className="self-start mr-auto bg-surface border border-line text-ink text-sm sm:text-base p-4 rounded-lg max-w-[96%] sm:max-w-[90%] space-y-3 shadow-2xs">
                     <div className="flex items-center justify-between border-b border-line pb-1.5">
-                      <span className="text-xs font-bold text-slrtce-maroon">CampusAI</span>
-                      <span className="text-[11px] text-secondary font-medium">Mira Road, Mumbai</span>
+                      <span className="text-sm font-bold text-slrtce-maroon">CampusAI</span>
+                      <span className="text-xs font-medium text-secondary">Mira Road, Mumbai</span>
                     </div>
 
                     <div className="leading-relaxed font-medium text-ink">{conversation.reply}</div>
@@ -869,28 +869,28 @@ export function KioskShell() {
 
                     {/* Structured Timetable Highlight */}
                     {activeRecord?.timetableDetails && (
-                      <div className="rounded-lg border border-line bg-ground p-2.5 space-y-2">
-                        <div className="flex items-center justify-between text-xs font-bold text-slrtce-navy">
+                      <div className="rounded-lg border border-line bg-ground p-3 space-y-2">
+                        <div className="flex items-center justify-between text-sm font-bold text-slrtce-navy">
                           <span>{activeRecord.timetableDetails.semester}</span>
-                          <span className="text-[10px] bg-warning-surface text-warning px-2 py-0.5 rounded font-semibold">
+                          <span className="text-xs bg-warning-surface text-warning px-2.5 py-1 rounded font-semibold tabular-nums">
                             {activeRecord.timetableDetails.examCell}
                           </span>
                         </div>
                         <div className="overflow-x-auto">
-                          <table className="w-full text-left text-xs bg-surface rounded border border-line">
-                            <thead className="bg-ground text-[11px] text-secondary border-b border-line">
+                          <table className="w-full text-left text-xs sm:text-sm bg-surface rounded border border-line">
+                            <thead className="bg-ground text-xs font-bold text-secondary border-b border-line">
                               <tr>
-                                <th className="p-2">Date & Time</th>
-                                <th className="p-2">Subject</th>
-                                <th className="p-2">Room</th>
+                                <th className="p-2.5">Date & Time</th>
+                                <th className="p-2.5">Subject</th>
+                                <th className="p-2.5">Room</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-line">
                               {activeRecord.timetableDetails.scheduleHighlights.map((row) => (
                                 <tr key={row.subject}>
-                                  <td className="p-2 whitespace-nowrap font-bold text-ink">{row.date} ({row.time})</td>
-                                  <td className="p-2 text-slrtce-maroon font-medium">{row.subject}</td>
-                                  <td className="p-2 text-secondary font-semibold">{row.room}</td>
+                                  <td className="p-2.5 whitespace-nowrap font-bold text-ink tabular-nums">{row.date} ({row.time})</td>
+                                  <td className="p-2.5 text-slrtce-maroon font-semibold">{row.subject}</td>
+                                  <td className="p-2.5 text-secondary font-medium tabular-nums">{row.room}</td>
                                 </tr>
                               ))}
                             </tbody>
@@ -901,15 +901,15 @@ export function KioskShell() {
 
                     {/* Structured Fee Breakdown */}
                     {activeRecord?.feeBreakdown && (
-                      <div className="rounded-lg border border-line bg-ground p-3 space-y-1.5 text-xs">
+                      <div className="rounded-lg border border-line bg-ground p-3.5 space-y-2 text-xs sm:text-sm">
                         <div className="flex items-center justify-between font-bold text-slrtce-navy">
-                          <span>{activeRecord.feeBreakdown.course}</span>
-                          <span className="text-slrtce-maroon text-sm">{activeRecord.feeBreakdown.totalAnnual}</span>
+                          <span className="text-sm sm:text-base">{activeRecord.feeBreakdown.course}</span>
+                          <span className="text-slrtce-maroon text-base sm:text-lg font-extrabold tabular-nums">{activeRecord.feeBreakdown.totalAnnual}</span>
                         </div>
-                        <div className="text-[11px] text-secondary">
+                        <div className="text-xs sm:text-sm text-secondary font-medium">
                           <strong>Eligibility:</strong> {activeRecord.feeBreakdown.eligibility}
                         </div>
-                        <div className="text-[10px] text-slrtce-gold font-semibold bg-warning-surface inline-block px-2 py-0.5 rounded">
+                        <div className="text-xs text-slrtce-gold font-semibold bg-warning-surface inline-block px-2.5 py-1 rounded tabular-nums">
                           {activeRecord.feeBreakdown.capCode}
                         </div>
                       </div>
@@ -917,18 +917,18 @@ export function KioskShell() {
 
                     {/* Deduplicated Related Inquiries Chips */}
                     {activeRecord?.followUps && activeRecord.followUps.length > 0 && (
-                      <div className="pt-2 border-t border-line space-y-1.5">
-                        <div className="text-[11px] font-semibold text-secondary flex items-center gap-1">
-                          <FiCornerDownRight className="w-3.5 h-3.5 text-slrtce-maroon" />
+                      <div className="pt-2 border-t border-line space-y-2">
+                        <div className="text-xs sm:text-sm font-bold text-secondary flex items-center gap-1.5">
+                          <FiCornerDownRight className="w-4 h-4 text-slrtce-maroon" />
                           <span>Related Inquiries</span>
                         </div>
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-2">
                           {activeRecord.followUps.map((chipText) => (
                             <button
                               key={chipText}
                               type="button"
                               onClick={() => executeQuery(chipText)}
-                              className="px-2.5 py-1 rounded bg-ground border border-line text-ink hover:bg-surface hover:border-slrtce-maroon hover:text-slrtce-maroon text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer"
+                              className="min-h-[38px] px-3.5 py-1.5 rounded bg-ground border border-line text-ink hover:bg-surface hover:border-slrtce-maroon hover:text-slrtce-maroon text-xs sm:text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer"
                             >
                               {chipText}
                             </button>
@@ -940,7 +940,7 @@ export function KioskShell() {
                     {/* Human Staff Desk Escalation Bell */}
                     <div className="pt-2 border-t border-line flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       {deskBellNotified ? (
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-success bg-success-surface px-2.5 py-1 rounded border border-success/20">
+                        <div className="flex items-center gap-2 min-h-[42px] text-xs sm:text-sm font-bold text-success bg-success-surface px-3 py-2 rounded border border-success/20">
                           <FiCheckCircle className="w-4 h-4 text-success shrink-0" />
                           <span>{t.humanDeskSent}</span>
                         </div>
@@ -948,13 +948,13 @@ export function KioskShell() {
                         <button
                           type="button"
                           onClick={handleRingDeskBell}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-ground border border-line text-ink hover:bg-surface hover:border-slrtce-maroon hover:text-slrtce-maroon text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer"
+                          className="inline-flex items-center gap-2 min-h-[42px] px-3.5 py-2 rounded bg-ground border border-line text-ink hover:bg-surface hover:border-slrtce-maroon hover:text-slrtce-maroon text-xs sm:text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon cursor-pointer"
                         >
-                          <FiBell className="w-3.5 h-3.5 text-slrtce-maroon" />
+                          <FiBell className="w-4 h-4 text-slrtce-maroon" />
                           <span>{t.humanDeskCTA}</span>
                         </button>
                       )}
-                      <span className="text-[11px] text-secondary font-medium">Counter 1, Ext. 101</span>
+                      <span className="text-xs sm:text-sm text-secondary font-medium tabular-nums">Counter 1, Ext. 101</span>
                     </div>
                   </div>
                 )}
@@ -965,7 +965,7 @@ export function KioskShell() {
           </div>
 
           {/* Bottom Input Dock */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2.5 border-t border-line shrink-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-2.5 border-t border-line shrink-0">
             
             {/* Primary CTA: Tap to Speak / Enable Mic Button */}
             {micPermitted === false ? (
@@ -973,7 +973,7 @@ export function KioskShell() {
                 type="button"
                 onClick={requestMicPermission}
                 title="Click to allow microphone access in your browser"
-                className="w-full sm:w-[200px] md:w-[220px] h-11 px-3.5 rounded bg-destructive text-white font-bold flex items-center justify-center gap-2 hover:bg-destructive/90 transition-colors focus-visible:outline-2 focus-visible:outline-destructive shrink-0 cursor-pointer shadow-2xs text-xs sm:text-sm"
+                className="w-full sm:w-[210px] md:w-[230px] h-12 px-4 rounded bg-destructive text-white font-bold flex items-center justify-center gap-2 hover:bg-destructive/90 transition-colors focus-visible:outline-2 focus-visible:outline-destructive shrink-0 cursor-pointer shadow-2xs text-sm sm:text-base"
               >
                 <FiMic className="w-4 h-4 shrink-0" aria-hidden="true" />
                 <span>{t.enableMic || "Enable Mic"}</span>
@@ -983,18 +983,18 @@ export function KioskShell() {
                 type="button"
                 onClick={handleStartVoice}
                 disabled={conversation.busy}
-                className="w-full sm:w-[190px] md:w-[210px] h-11 px-3.5 rounded bg-slrtce-maroon text-white font-bold flex items-center justify-between hover:bg-slrtce-maroon-hover disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon shrink-0 cursor-pointer shadow-2xs"
+                className="w-full sm:w-[200px] md:w-[220px] h-12 px-4 rounded bg-slrtce-maroon text-white font-bold flex items-center justify-between hover:bg-slrtce-maroon-hover disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon shrink-0 cursor-pointer shadow-2xs"
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <FiMic className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  <span className="text-xs sm:text-sm font-bold truncate">
+                  <span className="text-sm sm:text-base font-bold truncate">
                     {speakButtonLabel}
                   </span>
                 </div>
 
                 {/* Discrete Animated Waveform Bars when listening */}
                 {conversation.state === "listening" && (
-                  <div className="flex items-center gap-0.5 h-3.5 shrink-0" aria-hidden="true">
+                  <div className="flex items-center gap-0.5 h-4 shrink-0" aria-hidden="true">
                     {[30, 80, 50, 95, 60, 40, 85, 45].map((h, i) => (
                       <span
                         key={`bar-${i}`}
@@ -1007,7 +1007,7 @@ export function KioskShell() {
               </button>
             )}
 
-            {/* Text Input with Distinct 44x44 Square Send Button */}
+            {/* Text Input with Distinct 48x48 Square Send Button */}
             <form onSubmit={handleSendTyped} className="flex-1 flex items-center gap-2 min-w-0 w-full">
               <input
                 type="text"
@@ -1016,12 +1016,12 @@ export function KioskShell() {
                 onChange={(e) => setTypedMessage(e.target.value)}
                 onFocus={() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })}
                 disabled={conversation.busy || voice.recording}
-                className="flex-1 h-11 rounded bg-ground border border-line px-3.5 text-xs sm:text-sm text-ink placeholder:text-secondary focus-visible:outline-2 focus-visible:outline-slrtce-maroon disabled:opacity-50 font-medium"
+                className="flex-1 h-12 rounded bg-ground border border-line px-4 text-sm sm:text-base text-ink placeholder:text-secondary focus-visible:outline-2 focus-visible:outline-slrtce-maroon disabled:opacity-50 font-medium"
               />
               <button
                 type="submit"
                 disabled={!hasTypedContent || conversation.busy || voice.recording}
-                className={`w-11 h-11 rounded flex items-center justify-center shrink-0 transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon ${
+                className={`w-12 h-12 rounded flex items-center justify-center shrink-0 transition-colors focus-visible:outline-2 focus-visible:outline-slrtce-maroon ${
                   hasTypedContent
                     ? "bg-slrtce-maroon text-white hover:bg-slrtce-maroon-hover cursor-pointer shadow-2xs"
                     : "bg-ground text-secondary/50 border border-line cursor-not-allowed"
@@ -1038,8 +1038,8 @@ export function KioskShell() {
 
       </main>
 
-      {/* 3. Footer (h-9, minimal, high-contrast status bar) */}
-      <footer className="h-9 px-4 lg:px-6 bg-surface border-t border-line flex items-center justify-between text-xs text-secondary font-medium shrink-0">
+      {/* 3. Footer (h-10, minimal, high-contrast status bar) */}
+      <footer className="h-10 px-4 lg:px-6 bg-surface border-t border-line flex items-center justify-between text-xs sm:text-sm text-secondary font-medium shrink-0">
         <div>
           <span>{t.footerLeft}</span>
         </div>
@@ -1074,33 +1074,33 @@ export function KioskShell() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="p-2.5 rounded bg-ground border border-line space-y-1">
-                <div className="text-[11px] font-semibold text-secondary">Audio Microphone</div>
+            <div className="grid grid-cols-2 gap-2 text-xs sm:text-sm">
+              <div className="p-3 rounded bg-ground border border-line space-y-1">
+                <div className="text-xs font-semibold text-secondary">Audio Microphone</div>
                 <div className="flex items-center gap-1.5 font-bold text-success">
                   <FiCheck className="w-3.5 h-3.5" />
                   <span>{micPermitted ? "Microphone Permitted" : "Microphone Blocked"}</span>
                 </div>
               </div>
 
-              <div className="p-2.5 rounded bg-ground border border-line space-y-1">
-                <div className="text-[11px] font-semibold text-secondary">SLRTCE Knowledge Base</div>
+              <div className="p-3 rounded bg-ground border border-line space-y-1">
+                <div className="text-xs font-semibold text-secondary">SLRTCE Knowledge Base</div>
                 <div className="flex items-center gap-1.5 font-bold text-success">
                   <FiCheck className="w-3.5 h-3.5" />
                   <span>6 Grounded Records</span>
                 </div>
               </div>
 
-              <div className="p-2.5 rounded bg-ground border border-line space-y-1">
-                <div className="text-[11px] font-semibold text-secondary">Network Status</div>
+              <div className="p-3 rounded bg-ground border border-line space-y-1">
+                <div className="text-xs font-semibold text-secondary">Network Status</div>
                 <div className="flex items-center gap-1.5 font-bold text-ink">
                   <span className="w-2 h-2 rounded-full bg-success" />
                   <span>{backendOnline ? "Online (Healthy)" : "Offline (Local Engine Active)"}</span>
                 </div>
               </div>
 
-              <div className="p-2.5 rounded bg-ground border border-line space-y-1">
-                <div className="text-[11px] font-semibold text-secondary">Viewport Lock</div>
+              <div className="p-3 rounded bg-ground border border-line space-y-1">
+                <div className="text-xs font-semibold text-secondary">Viewport Lock</div>
                 <div className="font-bold text-ink">100dvh Zero-Scroll</div>
               </div>
             </div>
@@ -1116,7 +1116,7 @@ export function KioskShell() {
                   setAdminModalOpen(false);
                   playKioskSound("success");
                 }}
-                className="flex-1 py-2 px-3 rounded bg-ground border border-line hover:bg-surface text-xs font-semibold text-ink flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 min-h-[38px] py-2 px-3 rounded bg-ground border border-line hover:bg-surface text-xs sm:text-sm font-semibold text-ink flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <FiRefreshCw className="w-3.5 h-3.5 text-slrtce-maroon" />
                 <span>Reset Session</span>
@@ -1128,7 +1128,7 @@ export function KioskShell() {
                   setAdminModalOpen(false);
                   setHardwareDrawerOpen(true);
                 }}
-                className="flex-1 py-2 px-3 rounded bg-slrtce-maroon text-white text-xs font-semibold hover:bg-slrtce-maroon-hover flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 min-h-[38px] py-2 px-3 rounded bg-slrtce-maroon text-white text-xs sm:text-sm font-semibold hover:bg-slrtce-maroon-hover flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <FiCpu className="w-3.5 h-3.5" />
                 <span>ESP32 Blueprint</span>
@@ -1136,7 +1136,7 @@ export function KioskShell() {
             </div>
 
             <form onSubmit={handleAdminPinSubmit} className="pt-2 border-t border-line space-y-2">
-              <div className="text-[11px] font-medium text-secondary">Enter Admin PIN (Default: 1234):</div>
+              <div className="text-xs font-medium text-secondary">Enter Admin PIN (Default: 1234):</div>
               <div className="flex gap-2">
                 <input
                   type="password"
@@ -1147,11 +1147,11 @@ export function KioskShell() {
                     setAdminError(false);
                   }}
                   placeholder="PIN"
-                  className="flex-1 h-9 rounded bg-ground border border-line px-3 text-center text-sm tracking-widest font-mono text-ink focus-visible:outline-2 focus-visible:outline-slrtce-maroon"
+                  className="flex-1 h-10 rounded bg-ground border border-line px-3 text-center text-sm tracking-widest font-mono text-ink focus-visible:outline-2 focus-visible:outline-slrtce-maroon"
                 />
                 <button
                   type="submit"
-                  className="px-4 h-9 rounded bg-slrtce-maroon text-white text-xs font-semibold hover:bg-slrtce-maroon-hover cursor-pointer"
+                  className="px-4 h-10 rounded bg-slrtce-maroon text-white text-xs sm:text-sm font-bold hover:bg-slrtce-maroon-hover cursor-pointer"
                 >
                   Unlock
                 </button>

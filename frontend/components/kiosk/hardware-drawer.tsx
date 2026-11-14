@@ -222,42 +222,42 @@ export function HardwareDrawer({ open, onClose }: HardwareDrawerProps) {
                 <div className="mt-3 p-3 rounded-lg bg-ground border border-line grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                   <div
                     onMouseEnter={() => setHighlightedBus("i2s-mic")}
-                    className={`p-2 rounded-md border motion-safe:transition-colors cursor-pointer ${
+                    className={`p-2.5 rounded-md border motion-safe:transition-colors cursor-pointer ${
                       highlightedBus === "i2s-mic" ? "bg-accent text-accent-foreground border-accent" : "bg-surface border-line"
                     }`}
                   >
-                    <div className="font-bold">INMP441 Mic</div>
-                    <div className="text-[10px] opacity-80">GPIO 14, 15, 32</div>
+                    <div className="font-bold text-xs sm:text-sm">INMP441 Mic</div>
+                    <div className="text-xs font-mono opacity-80">GPIO 14, 15, 32</div>
                   </div>
 
                   <div
                     onMouseEnter={() => setHighlightedBus("i2s-amp")}
-                    className={`p-2 rounded-md border motion-safe:transition-colors cursor-pointer ${
+                    className={`p-2.5 rounded-md border motion-safe:transition-colors cursor-pointer ${
                       highlightedBus === "i2s-amp" ? "bg-accent text-accent-foreground border-accent" : "bg-surface border-line"
                     }`}
                   >
-                    <div className="font-bold">MAX98357A Amp</div>
-                    <div className="text-[10px] opacity-80">GPIO 22, 25, 26</div>
+                    <div className="font-bold text-xs sm:text-sm">MAX98357A Amp</div>
+                    <div className="text-xs font-mono opacity-80">GPIO 22, 25, 26</div>
                   </div>
 
                   <div
                     onMouseEnter={() => setHighlightedBus("display")}
-                    className={`p-2 rounded-md border motion-safe:transition-colors cursor-pointer ${
+                    className={`p-2.5 rounded-md border motion-safe:transition-colors cursor-pointer ${
                       highlightedBus === "display" ? "bg-accent text-accent-foreground border-accent" : "bg-surface border-line"
                     }`}
                   >
-                    <div className="font-bold">7-in IPS Touch</div>
-                    <div className="text-[10px] opacity-80">HDMI + USB HID</div>
+                    <div className="font-bold text-xs sm:text-sm">7-in IPS Touch</div>
+                    <div className="text-xs font-mono opacity-80">HDMI + USB HID</div>
                   </div>
 
                   <div
                     onMouseEnter={() => setHighlightedBus("servo")}
-                    className={`p-2 rounded-md border motion-safe:transition-colors cursor-pointer ${
+                    className={`p-2.5 rounded-md border motion-safe:transition-colors cursor-pointer ${
                       highlightedBus === "servo" ? "bg-accent text-accent-foreground border-accent" : "bg-surface border-line"
                     }`}
                   >
-                    <div className="font-bold">Head Pan/Tilt</div>
-                    <div className="text-[10px] opacity-80">PWM GPIO 18, 19</div>
+                    <div className="font-bold text-xs sm:text-sm">Head Pan/Tilt</div>
+                    <div className="text-xs font-mono opacity-80">PWM GPIO 18, 19</div>
                   </div>
                 </div>
               </div>
@@ -340,7 +340,7 @@ export function HardwareDrawer({ open, onClose }: HardwareDrawerProps) {
 
                 {/* State Progress Bar */}
                 <div className="p-3 rounded-lg bg-ground border border-line space-y-2">
-                  <div className="flex items-center justify-between text-[11px]">
+                  <div className="flex items-center justify-between text-xs font-semibold">
                     <span>
                       Gate State:{" "}
                       <strong className={decayActive ? "text-accent" : "text-success"}>
