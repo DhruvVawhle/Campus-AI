@@ -179,7 +179,7 @@ export function WayfindingCard({ location, title, qrUri, onOpenDrawer }: Wayfind
 
       {/* QR Code Handoff Card */}
       {showQr && (
-        <div className="p-3 rounded-lg bg-ground border border-line flex items-center gap-3 motion-safe:transition-all">
+        <div className="p-3 rounded-lg bg-ground border border-line flex items-center gap-3 motion-safe:transition-opacity">
           <div className="w-16 h-16 bg-surface p-1 rounded-lg border border-line flex items-center justify-center shrink-0">
             <svg viewBox="0 0 24 24" className="w-full h-full text-ink" role="img" aria-label="QR code for phone directions">
               <title>Phone Directions QR Code</title>
