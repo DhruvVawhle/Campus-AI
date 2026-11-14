@@ -142,15 +142,17 @@ export function HardwareDrawer({ open, onClose }: HardwareDrawerProps) {
         {/* Drawer Header */}
         <div className="p-5 sm:p-6 border-b border-line bg-surface flex items-center justify-between">
           <div>
-            <div className="text-xs font-semibold text-secondary">CampusAI Hardware & Architecture</div>
-            <h2 id="drawer-title" className="text-xl font-extrabold text-ink tracking-tight mt-0.5">
-              Physical Robot & System Blueprint
+            <h2 id="drawer-title" className="text-xl font-extrabold text-ink tracking-tight">
+              Robot & Architecture Blueprint
             </h2>
+            <p className="text-xs text-secondary mt-0.5">
+              Hardware bill of materials, echo suppression, and agent architecture.
+            </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-ground border border-line flex items-center justify-center text-secondary hover:text-ink hover:bg-surface-muted motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent active:scale-98"
+            className="w-10 h-10 rounded-full bg-ground border border-line flex items-center justify-center text-secondary hover:text-ink hover:bg-surface-muted motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent"
             aria-label="Close drawer"
           >
             <FiX className="w-5 h-5" aria-hidden="true" />

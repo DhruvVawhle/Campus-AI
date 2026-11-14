@@ -5,7 +5,7 @@
 :root {
   --ground: #F4F5F7;
   --ink: #0F1216;
-  --secondary: #4A5260;
+  --secondary: #2D3748;
   --line: #D8DCE3;
   --line-strong: #B4BCC8;
   --surface: #FFFFFF;
@@ -14,7 +14,7 @@
   --surface-dark-card: #151921;
   --surface-dark-line: #242A36;
   --ink-dark: #F0F3F7;
-  --secondary-dark: #8E98A8;
+  --secondary-dark: #CBD5E1;
   --accent: #B3401E;
   --accent-hover: #983416;
   --accent-surface: #FDF1ED;
@@ -25,13 +25,14 @@
   --success-surface: #ECFDF3;
   --warning: #D97706;
   --warning-surface: #FEF3C7;
+  --warning-ink: #92400E;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --ground: #0D1015;
     --ink: #F0F3F7;
-    --secondary: #8E98A8;
+    --secondary: #CBD5E1;
     --line: #242A36;
     --line-strong: #374052;
     --surface: #151921;
@@ -51,6 +52,7 @@
     --success-surface: #064E3B;
     --warning: #FBBF24;
     --warning-surface: #78350F;
+    --warning-ink: #FDE68A;
   }
 }
 
@@ -77,6 +79,7 @@
   --color-success-surface: var(--success-surface);
   --color-warning: var(--warning);
   --color-warning-surface: var(--warning-surface);
+  --color-warning-ink: var(--warning-ink);
   
   --font-sans: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -87,7 +90,7 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
-    font-size: clamp(14px, 1.05vw, 18px);
+    font-size: clamp(13px, 0.95vw, 16px);
     overflow-x: clip;
     scroll-behavior: smooth;
   }
@@ -134,6 +137,15 @@
     border-radius: 999px;
   }
 
+  /* Unified touchscreen kiosk viewport: 100% height, zero window scroll on desktop/laptop */
+  @media (min-width: 1024px) {
+    .kiosk-viewport-fit {
+      height: 100dvh;
+      max-height: 100dvh;
+      overflow: hidden;
+    }
+  }
+
   .interactive-tap:active {
     transform: translateY(1px) scale(0.99);
   }
@@ -153,6 +165,48 @@
     .subtle-lift, .subtle-lift:hover {
       transition: none;
       transform: none;
+    }
+  }
+
+  @keyframes sound-ring {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.45;
+    }
+    100% {
+      transform: scale(1.7);
+      opacity: 0;
+    }
+  }
+
+  @keyframes wave-bar {
+    0%, 100% {
+      transform: scaleY(0.3);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-sound-ring-1 {
+      animation: sound-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    .animate-sound-ring-2 {
+      animation: sound-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite 1s;
+    }
+    .animate-wave-bar {
+      animation: wave-bar 0.8s ease-in-out infinite alternate;
+      transform-origin: bottom;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-sound-ring-1,
+    .animate-sound-ring-2,
+    .animate-wave-bar {
+      animation: none !important;
+      opacity: 0 !important;
     }
   }
 }

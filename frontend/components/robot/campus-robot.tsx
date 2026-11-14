@@ -14,7 +14,8 @@ function Ell({ s, p, m }: { s: [number, number, number]; p: [number, number, num
   )
 }
 
-type Expr = 'happy' | 'open' | 'blink' | 'think' | 'sad'
+type Expr = 'happy' | 'open' | 'blink' | 'think' | 'sad' | 'speak'
+
 function paintFace(c: HTMLCanvasElement, e: Expr) {
   const g = c.getContext('2d')!, W = c.width, H = c.height
   g.clearRect(0, 0, W, H)
@@ -31,14 +32,35 @@ function paintFace(c: HTMLCanvasElement, e: Expr) {
   const y = H * 0.52
   ;[W / 2 - W * 0.27, W / 2 + W * 0.27].forEach((x) => {
     g.beginPath()
-    if (e === 'happy') { g.lineWidth = 46; g.arc(x, y + 34, 80, Math.PI * 1.12, Math.PI * 1.88); g.stroke() }
-    else if (e === 'sad') { g.lineWidth = 46; g.arc(x, y + 110, 80, Math.PI * 0.12, Math.PI * 0.88); g.stroke() }
-    else if (e === 'blink') { g.lineWidth = 40; g.moveTo(x - 72, y); g.lineTo(x + 72, y); g.stroke() }
-    else if (e === 'think') { g.ellipse(x, y - 20, 46, 46, 0, 0, Math.PI * 2); g.fill() }
-    else { g.ellipse(x, y, 54, 86, 0, 0, Math.PI * 2); g.fill() }
+    if (e === 'happy') {
+      g.lineWidth = 46; g.arc(x, y + 34, 80, Math.PI * 1.12, Math.PI * 1.88); g.stroke()
+    } else if (e === 'sad') {
+      g.lineWidth = 46; g.arc(x, y + 110, 80, Math.PI * 0.12, Math.PI * 0.88); g.stroke()
+    } else if (e === 'blink') {
+      g.lineWidth = 40; g.moveTo(x - 72, y); g.lineTo(x + 72, y); g.stroke()
+    } else if (e === 'think') {
+      // Thoughtful upward eyes
+      g.ellipse(x, y - 28, 48, 48, 0, 0, Math.PI * 2); g.fill()
+    } else if (e === 'speak') {
+      // Lively speaking eyes + equalizer smile
+      g.ellipse(x, y + 10, 50, 75, 0, 0, Math.PI * 2); g.fill()
+    } else {
+      // Wide alert listening eyes
+      g.ellipse(x, y, 62, 94, 0, 0, Math.PI * 2); g.fill()
+    }
   })
+
+  // If speaking, draw mouth animation bar
+  if (e === 'speak') {
+    g.beginPath()
+    g.lineWidth = 26
+    g.arc(W / 2, y + 90, 55, Math.PI * 0.18, Math.PI * 0.82)
+    g.stroke()
+  }
+
   g.restore()
 }
+
 function Face({ state }: { state: RobotState }) {
   const { c, tex } = useMemo(() => {
     const c = document.createElement('canvas'); c.width = 1024; c.height = 768
@@ -51,8 +73,21 @@ function Face({ state }: { state: RobotState }) {
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime(), b = blink.current
     if (t > b.next && b.at < 0) { b.at = t; b.next = t + 2.5 + Math.random() * 3 }
-    let e: Expr = state === 'listening' ? 'open' : state === 'thinking' ? 'think' : state === 'error' ? 'sad' : 'happy'
-    if (b.at >= 0) { if (t - b.at > 0.16) b.at = -1; else if (e !== 'think') e = 'blink' }
+    let e: Expr =
+      state === 'listening'
+        ? 'open'
+        : state === 'thinking'
+        ? 'think'
+        : state === 'speaking'
+        ? 'speak'
+        : state === 'error'
+        ? 'sad'
+        : 'happy'
+
+    if (b.at >= 0) {
+      if (t - b.at > 0.16) b.at = -1;
+      else if (e !== 'think') e = 'blink'
+    }
     if (e !== cur.current) { cur.current = e; paintFace(c, e); tex.needsUpdate = true }
   })
   return (
@@ -71,12 +106,24 @@ function Robot({ state, reduce }: { state: RobotState; reduce: boolean }) {
   const armR = useRef<THREE.Group>(null!)
   const ptr = useRef({ x: 0, y: 0, last: -99, spin: 0, drag: false, dx: 0 })
   const wave = useRef({ start: 3 })
+
+  const antMat = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#b3401e',
+        roughness: 0.2,
+        emissive: '#b3401e',
+        emissiveIntensity: 0.5,
+      }),
+    []
+  )
+
   const m = useMemo(() => ({
     white: new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.3, metalness: 0.05, emissive: '#ffffff', emissiveIntensity: 0.18 }),
     black: new THREE.MeshStandardMaterial({ color: '#0b0d12', roughness: 0.1, metalness: 0.25 }),
-    accent: new THREE.MeshStandardMaterial({ color: '#b3401e', roughness: 0.35 }),
+    accent: antMat,
     grey: new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.5, emissive: '#ffffff', emissiveIntensity: 0.18 }),
-  }), [])
+  }), [antMat])
 
   useEffect(() => {
     const mv = (e: PointerEvent) => {
@@ -98,14 +145,42 @@ function Robot({ state, reduce }: { state: RobotState; reduce: boolean }) {
     if (performance.now() / 1000 - P.last > 4) { tx = Math.sin(t * 0.4) * 0.6; ty = Math.sin(t * 0.27) * 0.25 }
     C.x += (tx - C.x) * 0.06; C.y += (ty - C.y) * 0.06; P.spin *= 0.96
     C.lean += ((state === 'listening' ? 0.55 : 0) - C.lean) * 0.08
+    
+    // Attract mode floating breathing animation
     root.current.position.set(0, Math.sin(t * 1.6) * 0.09 * k, C.lean)
     root.current.rotation.y = C.x * 0.35 + Math.sin(t * 0.5) * 0.1 * k + P.spin
     head.current.rotation.set(C.y * 0.3, C.x * 0.45, -C.x * 0.06)
     ant.current.rotation.set(Math.sin(t * 1.7) * 0.08 * k, 0, Math.sin(t * 2.2) * 0.12 * k)
-    if (state === 'thinking') { head.current.rotation.z += 0.14 + Math.sin(t * 3) * 0.05; ant.current.rotation.z += Math.sin(t * 9) * 0.18 }
-    if (state === 'speaking' && !reduce) { head.current.rotation.x += Math.sin(t * 9) * 0.05; root.current.position.y += Math.abs(Math.sin(t * 7)) * 0.04 }
-    if (state === 'error') head.current.rotation.z += 0.22
-    // arms + wave (idle only)
+
+    // State-driven sensory feedback
+    if (state === 'listening') {
+      antMat.color.set('#16a34a')
+      antMat.emissive.set('#22c55e')
+      antMat.emissiveIntensity = 2.0 + Math.sin(t * 9) * 0.8
+    } else if (state === 'thinking') {
+      head.current.rotation.z += 0.14 + Math.sin(t * 3) * 0.05
+      ant.current.rotation.z += Math.sin(t * 9) * 0.18
+      antMat.color.set('#d97706')
+      antMat.emissive.set('#f59e0b')
+      antMat.emissiveIntensity = 1.6 + Math.sin(t * 12) * 0.7
+    } else if (state === 'speaking' && !reduce) {
+      head.current.rotation.x += Math.sin(t * 9) * 0.05
+      root.current.position.y += Math.abs(Math.sin(t * 7)) * 0.04
+      antMat.color.set('#b3401e')
+      antMat.emissive.set('#b3401e')
+      antMat.emissiveIntensity = 1.4 + Math.sin(t * 10) * 0.5
+    } else if (state === 'error') {
+      head.current.rotation.z += 0.22
+      antMat.color.set('#dc2626')
+      antMat.emissive.set('#ef4444')
+      antMat.emissiveIntensity = 1.2
+    } else {
+      antMat.color.set('#b3401e')
+      antMat.emissive.set('#b3401e')
+      antMat.emissiveIntensity = 0.5 + Math.sin(t * 2) * 0.2
+    }
+
+    // Arm gestures
     armL.current.rotation.z = 0.22 + Math.sin(t * 1.6 + 1) * 0.05 * k
     const w = t - wave.current.start
     let rz = -0.22 - Math.sin(t * 1.6) * 0.05 * k
