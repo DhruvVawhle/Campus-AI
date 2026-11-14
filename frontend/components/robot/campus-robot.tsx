@@ -110,9 +110,9 @@ function Robot({ state, reduce }: { state: RobotState; reduce: boolean }) {
   const antMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#b3401e',
+        color: '#1d4ed8',
         roughness: 0.2,
-        emissive: '#b3401e',
+        emissive: '#1d4ed8',
         emissiveIntensity: 0.5,
       }),
     []
@@ -166,8 +166,8 @@ function Robot({ state, reduce }: { state: RobotState; reduce: boolean }) {
     } else if (state === 'speaking' && !reduce) {
       head.current.rotation.x += Math.sin(t * 9) * 0.05
       root.current.position.y += Math.abs(Math.sin(t * 7)) * 0.04
-      antMat.color.set('#b3401e')
-      antMat.emissive.set('#b3401e')
+      antMat.color.set('#2563eb')
+      antMat.emissive.set('#3b82f6')
       antMat.emissiveIntensity = 1.4 + Math.sin(t * 10) * 0.5
     } else if (state === 'error') {
       head.current.rotation.z += 0.22
@@ -175,8 +175,8 @@ function Robot({ state, reduce }: { state: RobotState; reduce: boolean }) {
       antMat.emissive.set('#ef4444')
       antMat.emissiveIntensity = 1.2
     } else {
-      antMat.color.set('#b3401e')
-      antMat.emissive.set('#b3401e')
+      antMat.color.set('#1d4ed8')
+      antMat.emissive.set('#1d4ed8')
       antMat.emissiveIntensity = 0.5 + Math.sin(t * 2) * 0.2
     }
 

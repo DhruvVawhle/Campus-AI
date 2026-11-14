@@ -1,26 +1,26 @@
-/* hallmark: theme: terracotta-mono genre: modern-minimal signature: live-3d-robot-and-audio-simulator */
-/* critique: tactile edge-ai kiosk reception portal, tokenized system, zero slop */
+/* hallmark: theme: swiss-station genre: modern-minimal signature: live-3d-robot-and-audio-simulator */
+/* critique: bespoke physical-digital campus kiosk, single-source navigation, zero card-in-card nesting, authentic institutional palette */
 @import "tailwindcss";
 
 :root {
-  --ground: #F4F5F7;
-  --ink: #0F1216;
-  --secondary: #2D3748;
-  --line: #D8DCE3;
-  --line-strong: #B4BCC8;
+  --ground: #F3F4F6;
+  --ink: #111827;
+  --secondary: #4B5563;
+  --line: #E5E7EB;
+  --line-strong: #D1D5DB;
   --surface: #FFFFFF;
-  --surface-muted: #ECEEF2;
-  --surface-dark: #0D1015;
-  --surface-dark-card: #151921;
-  --surface-dark-line: #242A36;
-  --ink-dark: #F0F3F7;
-  --secondary-dark: #CBD5E1;
-  --accent: #B3401E;
-  --accent-hover: #983416;
-  --accent-surface: #FDF1ED;
-  --accent-surface-dark: #2A1713;
+  --surface-muted: #F9FAFB;
+  --surface-dark: #0A0D12;
+  --surface-dark-card: #111620;
+  --surface-dark-line: #1F2736;
+  --ink-dark: #F3F4F6;
+  --secondary-dark: #9CA3AF;
+  --accent: #1D4ED8;
+  --accent-hover: #1E40AF;
+  --accent-surface: #EFF6FF;
+  --accent-surface-dark: #172554;
   --accent-foreground: #FFFFFF;
-  --chip-border: #C5CAD3;
+  --chip-border: #D1D5DB;
   --success: #15803D;
   --success-surface: #ECFDF3;
   --warning: #D97706;
@@ -30,24 +30,24 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ground: #0D1015;
-    --ink: #F0F3F7;
-    --secondary: #CBD5E1;
-    --line: #242A36;
-    --line-strong: #374052;
-    --surface: #151921;
-    --surface-muted: #1C212B;
-    --surface-dark: #080A0E;
-    --surface-dark-card: #0F131A;
-    --surface-dark-line: #1D2330;
-    --ink-dark: #F0F3F7;
-    --secondary-dark: #8E98A8;
-    --accent: #E0693F;
-    --accent-hover: #F07E55;
-    --accent-surface: #2A1713;
-    --accent-surface-dark: #1E1210;
-    --accent-foreground: #0D1015;
-    --chip-border: #2D3545;
+    --ground: #0A0D12;
+    --ink: #F3F4F6;
+    --secondary: #9CA3AF;
+    --line: #1F2736;
+    --line-strong: #374151;
+    --surface: #111620;
+    --surface-muted: #161D2A;
+    --surface-dark: #07090D;
+    --surface-dark-card: #0D121A;
+    --surface-dark-line: #1A212E;
+    --ink-dark: #F3F4F6;
+    --secondary-dark: #9CA3AF;
+    --accent: #3B82F6;
+    --accent-hover: #60A5FA;
+    --accent-surface: #172554;
+    --accent-surface-dark: #0F172A;
+    --accent-foreground: #FFFFFF;
+    --chip-border: #374151;
     --success: #34D399;
     --success-surface: #064E3B;
     --warning: #FBBF24;

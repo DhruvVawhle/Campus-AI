@@ -15,13 +15,13 @@ import {
   FiLock,
   FiX,
   FiGlobe,
-  FiActivity,
   FiCornerDownRight,
   FiBell,
   FiCheckCircle,
   FiRefreshCw,
   FiCpu,
   FiCheck,
+  FiCompass,
 } from "react-icons/fi";
 import { LuGraduationCap } from "react-icons/lu";
 import dynamic from "next/dynamic";
@@ -59,174 +59,209 @@ function Spinner() {
   );
 }
 
+// Single Source of Truth for Directory & Inquiries
+interface CampusTopic {
+  id: string;
+  category: "all" | "directory" | "admissions" | "exams" | "facilities";
+  title: string;
+  subtitle: string;
+  icon: typeof FiMapPin;
+  prompt: string;
+}
+
+const DIRECTORY_TOPICS: CampusTopic[] = [
+  {
+    id: "dir-cs",
+    category: "directory",
+    title: "Dr. Rajesh Sharma (CS Dept)",
+    subtitle: "Cabin C-301, 3rd Floor, West Wing",
+    icon: FiMapPin,
+    prompt: "Where is Dr. Rajesh Sharma's cabin in West Wing?",
+  },
+  {
+    id: "dir-aids",
+    category: "directory",
+    title: "Dr. Anand Deshmukh (AI & DS)",
+    subtitle: "Cabin A-202, 2nd Floor, East Wing",
+    icon: FiCompass,
+    prompt: "Where is Dr. Anand Deshmukh's cabin?",
+  },
+  {
+    id: "adm-fees",
+    category: "admissions",
+    title: "B.Tech AI & Data Science Fees",
+    subtitle: "Tuition, seat intake & eligibility criteria",
+    icon: LuGraduationCap,
+    prompt: "What are the fees and eligibility for B.Tech AI & Data Science?",
+  },
+  {
+    id: "exm-tt",
+    category: "exams",
+    title: "Semester Examination Schedule",
+    subtitle: "Exam Cell Room A-104 & dates",
+    icon: FiCalendar,
+    prompt: "What is the examination timetable for semester 3?",
+  },
+  {
+    id: "lib-hours",
+    category: "facilities",
+    title: "Central Library & Reading Hall",
+    subtitle: "Opening hours, digital catalog & study slots",
+    icon: FiInfo,
+    prompt: "When does the central library and reading hall open?",
+  },
+];
+
 // Multilingual Kiosk Localization Dictionary
 const I18N = {
   en: {
-    heading: "How can I help?",
-    subtitle: "Select a department or speak naturally into the microphone.",
-    categoryMenus: [
-      { id: "dir", label: "Campus Directory", icon: FiMapPin, hint: "Faculty cabins & HOD offices", prompt: "Where is Dr. Rajesh Sharma's cabin in West Wing?" },
-      { id: "adm", label: "Admissions 2026", icon: LuGraduationCap, hint: "B.Tech AI-DS fees & seats", prompt: "What are the fees and eligibility for B.Tech AI & Data Science?" },
-      { id: "exm", label: "Examination Cell", icon: FiCalendar, hint: "Semester 3 exam schedules", prompt: "What is the examination timetable for semester 3?" },
-      { id: "lib", label: "Library & Facilities", icon: FiInfo, hint: "Reading hall hours & GPU labs", prompt: "When does the central library and reading hall open?" },
+    heading: "Campus Information",
+    subtitle: "Touch an inquiry or speak naturally to ask questions.",
+    categoryFilters: [
+      { id: "all", label: "All Topics" },
+      { id: "directory", label: "Directory" },
+      { id: "admissions", label: "Admissions" },
+      { id: "exams", label: "Exams" },
+      { id: "facilities", label: "Facilities" },
     ],
-    greetingIdle: "Welcome to campus. Tap to speak or select an inquiry below.",
-    greetingSpoken: "Hello! I am CampusAI, your autonomous campus receptionist. How may I assist you today?",
-    liveDialogue: "Live dialogue",
-    clear: "Clear",
-    readyVoice: "Ready for your voice",
-    readyHint: "Walk up & say 'Hello CampusAI' or tap any starter topic.",
-    tapToSpeak: "Tap to speak",
+    greetingIdle: "Welcome to campus. Tap to speak or select an inquiry from the directory.",
+    greetingSpoken: "Hello! I am CampusAI, your campus reception assistant. How can I assist you today?",
+    assistantLabel: "Campus Assistant",
+    clear: "Clear Session",
+    readyVoice: "Ready to assist",
+    readyHint: "Speak naturally or select any topic from the directory on the left.",
+    tapToSpeak: "Tap to Speak",
     listening: "Listening…",
-    thinking: "Thinking…",
+    thinking: "Processing…",
     speaking: "Speaking…",
-    searchingDb: "Searching college database…",
-    typePlaceholder: "Or type an inquiry…",
-    langScope: "Voice & Display Language",
-    speakerOn: "Voice Output: On",
-    speakerMuted: "Voice Output: Muted",
-    onlineReady: "Online • Ready",
-    localReady: "Local Engine • Ready",
-    systemNotice: "System Alert",
-    humanDesk: "Ring Reception Desk Bell",
-    humanDeskSent: "Bell chime sent to Reception Desk (Station 1). An executive has been notified.",
-    starters: [
-      { label: "📍 Exam Cell Room A-104", query: "Where is the Exam Cell located?" },
-      { label: "💰 B.Tech AI-DS Fee Details", query: "What are the fees and eligibility for B.Tech AI & Data Science?" },
-      { label: "🕒 Library Reading Hall Hours", query: "When does the central library and reading hall open?" },
-      { label: "📶 Guest Wi-Fi Access", query: "How do visitors connect to campus Wi-Fi?" },
-    ],
+    searchingDb: "Retrieving records…",
+    typePlaceholder: "Type a campus question…",
+    langScope: "Language",
+    speakerOn: "Voice: On",
+    speakerMuted: "Voice: Muted",
+    onlineReady: "Ready",
+    localReady: "Offline (Local)",
+    humanDesk: "Contact Staff Desk",
+    humanDeskSent: "Staff desk at Counter 1 has been paged.",
+    footerDisclaimer: "Information Station • Microphones activate only during dialogue.",
+    footerStation: "Station: Main Lobby • Ext 101",
   },
   hi: {
-    heading: "मैं कैसे सहायता कर सकता हूँ?",
-    subtitle: "विभाग चुनें या सीधे माइक्रोफ़ोन में बोलें।",
-    categoryMenus: [
-      { id: "dir", label: "परिसर डायरेक्टरी", icon: FiMapPin, hint: "फैकल्टी केबिन व विभागाध्यक्ष", prompt: "डॉ. राजेश शर्मा का केबिन कहाँ है?" },
-      { id: "adm", label: "प्रवेश २०२६", icon: LuGraduationCap, hint: "बी.टेक एआई फीस व सीटें", prompt: "बी.टेक एआई और डेटा साइंस की फीस और पात्रता क्या है?" },
-      { id: "exm", label: "परीक्षा कक्ष", icon: FiCalendar, hint: "सेमेस्टर ३ परीक्षा सारणी", prompt: "सेमेस्टर 3 की परीक्षा समय सारणी क्या है?" },
-      { id: "lib", label: "पुस्तकालय व सुविधाएँ", icon: FiInfo, hint: "रीडिंग हॉल समय व लैब", prompt: "केंद्रीय पुस्तकालय और रीडिंग हॉल कब खुलता है?" },
+    heading: "परिसर सूचना केंद्र",
+    subtitle: "विषय चुनें या माइक्रोफ़ोन में स्वाभाविक रूप से बोलें।",
+    categoryFilters: [
+      { id: "all", label: "सभी विषय" },
+      { id: "directory", label: "निर्देशिका" },
+      { id: "admissions", label: "प्रवेश" },
+      { id: "exams", label: "परीक्षा" },
+      { id: "facilities", label: "सुविधाएँ" },
     ],
-    greetingIdle: "परिसर में आपका स्वागत है। बोलने के लिए टैप करें या विषय चुनें।",
+    greetingIdle: "परिसर में आपका स्वागत है। बोलने के लिए टैप करें या निर्देशिका से विषय चुनें।",
     greetingSpoken: "नमस्ते! मैं CampusAI हूँ। कॉलेज के बारे में कुछ भी पूछें।",
-    liveDialogue: "लाइव संवाद",
-    clear: "साफ़ करें",
-    readyVoice: "आपकी आवाज़ के लिए तैयार",
-    readyHint: "'नमस्ते CampusAI' बोलें या नीचे दिए गए किसी विषय पर टैप करें।",
+    assistantLabel: "कैंपस सहायक",
+    clear: "सत्र साफ़ करें",
+    readyVoice: "सहायता के लिए तैयार",
+    readyHint: "स्वाभाविक रूप से बोलें या बाईं ओर की निर्देशिका से कोई विषय चुनें।",
     tapToSpeak: "बोलने के लिए टैप करें",
     listening: "सुन रहा हूँ…",
-    thinking: "सोच रहा हूँ…",
+    thinking: "प्रोसेस हो रहा है…",
     speaking: "बोल रहा हूँ…",
-    searchingDb: "कॉलेज डेटाबेस में खोज रहे हैं…",
-    typePlaceholder: "या प्रश्न टाइप करें…",
-    langScope: "भाषा (Voice & Display)",
+    searchingDb: "जानकारी खोजी जा रही है…",
+    typePlaceholder: "कॉलेज से जुड़ा प्रश्न टाइप करें…",
+    langScope: "भाषा",
     speakerOn: "आवाज़: चालू",
     speakerMuted: "आवाज़: बंद",
-    onlineReady: "ऑनलाइन • तैयार",
-    localReady: "स्थानीय इंजन • तैयार",
-    systemNotice: "सिस्टम सूचना",
-    humanDesk: "रिसेप्शन घंटी बजाएँ",
-    humanDeskSent: "रिसेप्शन डेस्क (स्टेशन 1) को अलर्ट भेज दिया गया है।",
-    starters: [
-      { label: "📍 एग्जाम सेल रूम A-104", query: "Where is the Exam Cell located?" },
-      { label: "💰 बी.टेक एआई फीस विवरण", query: "What are the fees and eligibility for B.Tech AI & Data Science?" },
-      { label: "🕒 लाइब्रेरी हॉल का समय", query: "When does the central library and reading hall open?" },
-      { label: "📶 गेस्ट वाई-फाई सुविधा", query: "How do visitors connect to campus Wi-Fi?" },
-    ],
+    onlineReady: "तैयार",
+    localReady: "ऑफ़लाइन (लोकल)",
+    humanDesk: "रिसेप्शन स्टाफ से संपर्क करें",
+    humanDeskSent: "काउंटर 1 पर स्टाफ को सूचित कर दिया गया है।",
+    footerDisclaimer: "सूचना केंद्र • केवल संवाद के समय माइक्रोफ़ोन चालू होता है।",
+    footerStation: "स्थान: मुख्य लॉबी • एक्सटेंशन 101",
   },
   mr: {
-    heading: "मी कशी मदत करू शकतो?",
-    subtitle: "विभाग निवडा किंवा थेट संभाषणासाठी बोला.",
-    categoryMenus: [
-      { id: "dir", label: "परिसर निर्देशिका", icon: FiMapPin, hint: "प्राध्यापक व विभागप्रमुख केबिन", prompt: "डॉ. राजेश शर्मांचे केबिन कुठे आहे?" },
-      { id: "adm", label: "प्रवेश २०२६", icon: LuGraduationCap, hint: "बी.टेक एआय फी व जागा", prompt: "बी.टेक एआय आणि डेटा सायन्सचे शुल्क आणि पात्रता काय आहे?" },
-      { id: "exm", label: "परीक्षा कक्ष", icon: FiCalendar, hint: "सत्र ३ परीक्षा वेळापत्रक", prompt: "सत्र 3 चे परीक्षा वेळापत्रक काय आहे?" },
-      { id: "lib", label: "ग्रंथालय व सुविधा", icon: FiInfo, hint: "वाचन कक्ष वेळ व लॅब", prompt: "मध्यवर्ती ग्रंथालय आणि वाचनालय कधी उघडते?" },
+    heading: "परिसर माहिती केंद्र",
+    subtitle: "विषय निवडा किंवा थेट संभाषणासाठी बोला.",
+    categoryFilters: [
+      { id: "all", label: "सर्व विषय" },
+      { id: "directory", label: "निर्देशिका" },
+      { id: "admissions", label: "प्रवेश" },
+      { id: "exams", label: "परीक्षा" },
+      { id: "facilities", label: "सुविधा" },
     ],
-    greetingIdle: "परिसरात आपले स्वागत आहे. बोलण्यासाठी टॅप करा किंवा विषय निवडा.",
+    greetingIdle: "परिसरात आपले स्वागत आहे. बोलण्यासाठी टॅप करा किंवा निर्देशिकेतून विषय निवडा.",
     greetingSpoken: "नमस्कार! मी CampusAI आहे. मी तुमची काय मदत करू शकतो?",
-    liveDialogue: "थेट संवाद",
-    clear: "साफ करा",
-    readyVoice: "तुमच्या आवाजासाठी सज्ज",
-    readyHint: "'नमस्कार CampusAI' बोला किंवा कोणत्याही विषयावर टॅप करा.",
+    assistantLabel: "कॅम्पस सहाय्यक",
+    clear: "सत्र साफ करा",
+    readyVoice: "मदतीसाठी सज्ज",
+    readyHint: "थेट बोला किंवा डाव्या बाजूच्या निर्देशिकेतून विषय निवडा.",
     tapToSpeak: "बोलण्यासाठी टॅप करा",
     listening: "ऐकत आहे…",
-    thinking: "विचार करत आहे…",
+    thinking: "प्रक्रिया सुरू आहे…",
     speaking: "बोलत आहे…",
-    searchingDb: "कॉलेज डेटाबेसमधून शोधत आहे…",
-    typePlaceholder: "किंवा प्रश्न टाइप करा…",
-    langScope: "भाषा (Voice & Display)",
+    searchingDb: "माहिती शोधत आहे…",
+    typePlaceholder: "प्रश्न टाइप करा…",
+    langScope: "भाषा",
     speakerOn: "आवाज: चालू",
     speakerMuted: "आवाज: बंद",
-    onlineReady: "ऑनलाइन • सज्ज",
-    localReady: "स्थानिक इंजिन • सज्ज",
-    systemNotice: "प्रणाली सूचना",
-    humanDesk: "रिसेप्शन घंटा वाजवा",
-    humanDeskSent: "रिसेप्शन डेस्क (स्टेशन 1) वर माहिती पाठवण्यात आली आहे.",
-    starters: [
-      { label: "📍 परीक्षा कक्ष रूम A-104", query: "Where is the Exam Cell located?" },
-      { label: "💰 बी.टेक एआय फी तपशील", query: "What are the fees and eligibility for B.Tech AI & Data Science?" },
-      { label: "🕒 ग्रंथालय वाचनालय वेळ", query: "When does the central library and reading hall open?" },
-      { label: "📶 अतिथी वाय-फाय सुविधा", query: "How do visitors connect to campus Wi-Fi?" },
-    ],
+    onlineReady: "सज्ज",
+    localReady: "ऑफलाइन (स्थानिक)",
+    humanDesk: "कर्मचाऱ्यांशी संपर्क साधा",
+    humanDeskSent: "काउंटर 1 वरील कर्मचाऱ्यांना अलर्ट पाठवला आहे.",
+    footerDisclaimer: "माहिती केंद्र • केवळ संवादादरम्यान मायक्रोफोन सक्रिय होतो.",
+    footerStation: "स्थान: मुख्य लॉबी • एक्स्टेंशन 101",
   },
   hinglish: {
-    heading: "How can I help you?",
-    subtitle: "Department select karein ya microphone me bolein.",
-    categoryMenus: [
-      { id: "dir", label: "Campus Directory", icon: FiMapPin, hint: "Faculty cabins & HODs", prompt: "Where is Dr. Rajesh Sharma's cabin?" },
-      { id: "adm", label: "Admissions 2026", icon: LuGraduationCap, hint: "B.Tech AI-DS fees & details", prompt: "What are the fees and eligibility for B.Tech AI & Data Science?" },
-      { id: "exm", label: "Exam Cell Info", icon: FiCalendar, hint: "Semester 3 timetable", prompt: "What is the examination timetable for semester 3?" },
-      { id: "lib", label: "Library Timings", icon: FiInfo, hint: "Reading hall hours & Wi-Fi", prompt: "When does the central library and reading hall open?" },
+    heading: "Campus Information",
+    subtitle: "Topic select karein ya microphone me bolein.",
+    categoryFilters: [
+      { id: "all", label: "All Topics" },
+      { id: "directory", label: "Directory" },
+      { id: "admissions", label: "Admissions" },
+      { id: "exams", label: "Exams" },
+      { id: "facilities", label: "Facilities" },
     ],
-    greetingIdle: "Welcome to campus. Tap karke bolein ya inquiry select karein.",
+    greetingIdle: "Welcome to campus. Tap karke bolein ya directory se topic select karein.",
     greetingSpoken: "Hello! Main CampusAI hoon. Aapki kya help kar sakta hoon?",
-    liveDialogue: "Live dialogue",
-    clear: "Clear",
-    readyVoice: "Ready for your voice",
-    readyHint: "Mic button dabayein, inquiry select karein ya type karein.",
-    tapToSpeak: "Tap to speak",
+    assistantLabel: "Campus Assistant",
+    clear: "Clear Session",
+    readyVoice: "Ready to assist",
+    readyHint: "Mic tap karein ya left directory se topic select karein.",
+    tapToSpeak: "Tap to Speak",
     listening: "Listening…",
-    thinking: "Thinking…",
+    thinking: "Processing…",
     speaking: "Speaking…",
-    searchingDb: "College database search ho raha hai…",
-    typePlaceholder: "Ya inquiry type karein…",
-    langScope: "Language (Voice & Display)",
-    speakerOn: "Voice Output: On",
-    speakerMuted: "Voice Output: Muted",
-    onlineReady: "Online • Ready",
-    localReady: "Local Engine • Ready",
-    systemNotice: "System Alert",
-    humanDesk: "Ring Reception Desk Bell",
-    humanDeskSent: "Bell chime sent to Reception Desk (Station 1). An executive has been notified.",
-    starters: [
-      { label: "📍 Exam Cell Room A-104", query: "Where is the Exam Cell located?" },
-      { label: "💰 B.Tech AI-DS Fees", query: "What are the fees and eligibility for B.Tech AI & Data Science?" },
-      { label: "🕒 Library Hall Timings", query: "When does the central library and reading hall open?" },
-      { label: "📶 Guest Wi-Fi Setup", query: "How do visitors connect to campus Wi-Fi?" },
-    ],
+    searchingDb: "Information search ho rahi hai…",
+    typePlaceholder: "Inquiry type karein…",
+    langScope: "Language",
+    speakerOn: "Voice: On",
+    speakerMuted: "Voice: Muted",
+    onlineReady: "Ready",
+    localReady: "Offline (Local)",
+    humanDesk: "Contact Staff Desk",
+    humanDeskSent: "Counter 1 staff ko inform kar diya gaya hai.",
+    footerDisclaimer: "Information Station • Microphones active only during dialogue.",
+    footerStation: "Station: Main Lobby • Ext 101",
   },
 };
 
 const DEMO_MODE_FORCED = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-const IDLE_TIMEOUT_MS = 45000; // 45s inactivity session reset
+const IDLE_TIMEOUT_MS = 45000;
 
 export function KioskShell() {
   const conversation = useConversation();
   const router = useRouter();
   const [demoMode, setDemoMode] = useState(DEMO_MODE_FORCED);
   const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
-  const [bannerDismissed, setBannerDismissed] = useState(false);
   const [lang, setLang] = useState<LanguageCode>("en");
   const [typedMessage, setTypedMessage] = useState("");
   const [hardwareDrawerOpen, setHardwareDrawerOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [activeRecord, setActiveRecord] = useState<GroundedCampusRecord | null>(null);
   const [deskBellNotified, setDeskBellNotified] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   // Real-time live interim STT transcription
   const [liveInterim, setLiveInterim] = useState("");
-
-  // Microphone permission state tracking
   const [micPermitted, setMicPermitted] = useState<boolean | null>(null);
 
   // Hidden technician console (5-tap trigger or 2.5s hold)
@@ -246,6 +281,12 @@ export function KioskShell() {
   const [currentHour, setCurrentHour] = useState(new Date().getHours());
 
   const t = I18N[lang] || I18N.en;
+
+  // Filtered directory items
+  const filteredTopics = useMemo(() => {
+    if (selectedCategory === "all") return DIRECTORY_TOPICS;
+    return DIRECTORY_TOPICS.filter((item) => item.category === selectedCategory);
+  }, [selectedCategory]);
 
   // Seamless Barge-In (Voice-to-Touch Interruption)
   const interruptSpeakingIfActive = useCallback(() => {
@@ -357,7 +398,7 @@ export function KioskShell() {
         const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         const rec = new SpeechRec();
         rec.continuous = false;
-        rec.interimResults = true; // Live interim streaming transcription
+        rec.interimResults = true;
         rec.lang = lang === "hi" ? "hi-IN" : lang === "mr" ? "mr-IN" : "en-IN";
 
         conversation.setListening(true);
@@ -429,10 +470,7 @@ export function KioskShell() {
         }
       };
 
-      wakeRec.onerror = () => {
-        // Silent recovery for wake word loop
-      };
-
+      wakeRec.onerror = () => {};
       wakeRec.start();
     } catch {
       // Browser mic policy
@@ -441,9 +479,7 @@ export function KioskShell() {
     return () => {
       try {
         wakeRec?.stop();
-      } catch {
-        // Ignored
-      }
+      } catch {}
     };
   }, [conversation.state, conversation.busy]);
 
@@ -523,17 +559,6 @@ export function KioskShell() {
     }
   };
 
-  const handleRetry = async () => {
-    playKioskSound("tap");
-    setBackendOnline(null);
-    try {
-      const healthy = await checkBackendHealth();
-      setBackendOnline(healthy);
-    } catch {
-      setBackendOnline(false);
-    }
-  };
-
   const handleSendTyped = (e: React.FormEvent) => {
     e.preventDefault();
     if (!typedMessage.trim() || conversation.busy) return;
@@ -551,7 +576,7 @@ export function KioskShell() {
         ? "नमस्ते! मैं CampusAI हूँ। आप मुझसे कॉलेज के बारे में कुछ भी पूछ सकते हैं।"
         : lang === "mr"
         ? "नमस्कार! मी CampusAI आहे. आपण मला कॉलेजबद्दल काहीही विचारू शकता."
-        : "Hello! I am CampusAI, your receptionist. Feel free to speak or tap any inquiry.";
+        : "Hello! I am CampusAI, your reception assistant. Feel free to speak or tap any inquiry from the directory.";
 
     conversation.showDemoAnswer("Hello CampusAI!", robotGreeting);
     if (soundEnabled) {
@@ -602,33 +627,30 @@ export function KioskShell() {
     }
   };
 
-  // Human receptionist escalation bell
   const handleRingDeskBell = () => {
     playKioskSound("success");
     setDeskBellNotified(true);
     if (soundEnabled) {
-      speakTextAloud("A desk bell notification has been transmitted to Station 1. An attendant is on their way.", lang);
+      speakTextAloud("A staff desk alert has been sent to Counter 1.", lang);
     }
   };
 
-  // Dynamic Time-Aware Campus Pulse logic
-  const campusPulse = useMemo(() => {
-    const isWorkingHours = currentHour >= 9 && currentHour < 17; // 9:00 AM to 5:00 PM
+  // Dynamic Office Hours Status
+  const officeHoursStatus = useMemo(() => {
+    const isWorkingHours = currentHour >= 9 && currentHour < 17;
     if (isWorkingHours) {
       return {
-        badge: "Campus Open: 9 AM - 5 PM",
-        detail: "Admissions Desk Active at Counter 1 • Central Library Open",
+        label: "Offices Open (09:00 - 17:00)",
         dot: "bg-emerald-500",
       };
     }
     return {
-      badge: "After-Hours Mode",
-      detail: "Admissions Closed (Opens 9 AM) • Central Library Open till 9 PM • Security Desk Active",
-      dot: "bg-amber-500",
+      label: "After Hours (Library open until 21:00)",
+      dot: "bg-blue-500",
     };
   }, [currentHour]);
 
-  // Deterministic Unified System Status (Zero false "System Alert" red pills)
+  // Unified Deterministic Status - Single indicator in Header only
   const isListening = conversation.state === "listening";
   const isThinking = conversation.state === "thinking";
   const isSpeaking = conversation.state === "speaking";
@@ -640,8 +662,8 @@ export function KioskShell() {
     : isSpeaking
     ? { label: t.speaking, dot: "bg-accent" }
     : (demoMode || backendOnline === false)
-    ? { label: t.localReady, dot: "bg-emerald-500" }
-    : { label: t.onlineReady, dot: "bg-emerald-500" };
+    ? { label: t.localReady, dot: "bg-emerald-600" }
+    : { label: t.onlineReady, dot: "bg-emerald-600" };
 
   const speakButtonLabel = isListening
     ? t.listening
@@ -659,41 +681,45 @@ export function KioskShell() {
   const hasTypedContent = typedMessage.trim().length > 0;
 
   return (
-    <div className="h-screen h-dvh max-h-screen max-h-dvh overflow-hidden bg-ground text-ink flex flex-col justify-between p-2.5 sm:p-3 lg:p-3 xl:p-3.5 select-none">
+    <div className="h-screen h-dvh max-h-screen max-h-dvh overflow-hidden bg-ground text-ink flex flex-col justify-between p-3 lg:p-4 select-none">
       
-      {/* Maximum-width container for desktop & ultrawide centering */}
+      {/* Maximum-width container for desktop & touchscreen centering */}
       <div className="w-full max-w-[1536px] mx-auto flex flex-col flex-1 h-full min-h-0 justify-between">
         
-        {/* Top Bar - Clean, responsive editorial header */}
-        <header className="flex items-center justify-between gap-2.5 pb-2 border-b border-line shrink-0 min-h-[40px]">
+        {/* Top Header: Clean Architectural Station Bar */}
+        <header className="flex items-center justify-between gap-3 pb-2.5 border-b border-line shrink-0 min-h-[44px]">
           
-          {/* Brand with Hidden Technician 5-Tap Gesture & Long-Press Trigger */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Brand with Hidden Technician Gesture */}
+          <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={handleLogoTap}
               onPointerDown={handleLogoPointerDown}
               onPointerUp={handleLogoPointerUp}
               onPointerLeave={handleLogoPointerUp}
-              className="min-h-[38px] text-lg sm:text-xl font-extrabold tracking-tight text-ink flex items-center focus-visible:outline-2 focus-visible:outline-accent rounded-lg select-none cursor-pointer"
-              title="CampusAI Reception Kiosk (Tap 5x for technician console)"
-              aria-label="CampusAI Home"
+              className="text-lg sm:text-xl font-black tracking-tight text-ink flex items-center focus-visible:outline-2 focus-visible:outline-accent rounded select-none cursor-pointer"
+              title="Campus Information Station (Tap 5x for technician tools)"
+              aria-label="Campus Information Station"
             >
               CampusAI
             </button>
-            <span className="hidden sm:inline-block px-2 py-0.5 rounded-md bg-surface border border-line text-xs font-bold text-secondary">
-              Reception Kiosk
+            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded bg-surface border border-line text-xs font-semibold text-secondary">
+              Information Station
+            </span>
+            <span className="hidden md:inline-flex items-center gap-1.5 text-xs text-secondary font-medium">
+              <span className={`w-1.5 h-1.5 rounded-full ${officeHoursStatus.dot}`} />
+              <span>{officeHoursStatus.label}</span>
             </span>
           </div>
 
           {/* Controls Cluster */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-2">
             
-            {/* Mic Permission Warning Pill if blocked */}
+            {/* Mic Permission Alert if blocked */}
             {micPermitted === false && (
-              <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs font-bold">
+              <span className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-xs font-semibold">
                 <FiMic className="w-3.5 h-3.5" />
-                <span>Mic Blocked</span>
+                <span>Microphone Muted by Browser</span>
               </span>
             )}
 
@@ -705,8 +731,8 @@ export function KioskShell() {
                 setSoundEnabled(!soundEnabled);
                 playKioskSound("tap");
               }}
-              className="min-h-[38px] min-w-[38px] flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface border border-line hover:bg-surface-muted text-xs font-bold text-ink shadow-2xs motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent"
-              aria-label={soundEnabled ? "Robot voice output enabled. Click to mute speaker." : "Robot voice output muted. Click to enable speaker."}
+              className="min-h-[38px] flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface border border-line hover:bg-surface-muted text-xs font-semibold text-ink motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent"
+              aria-label={soundEnabled ? "Voice output enabled. Click to mute." : "Voice output muted. Click to enable."}
             >
               {soundEnabled ? (
                 <FiVolume2 className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
@@ -716,98 +742,84 @@ export function KioskShell() {
               <span className="hidden sm:inline">{soundEnabled ? t.speakerOn : t.speakerMuted}</span>
             </button>
 
-            {/* Unified Deterministic System Status */}
-            <div className="min-h-[38px] flex items-center gap-1.5 px-3 rounded-xl border border-line bg-surface text-xs font-bold text-ink">
+            {/* Single Deterministic System Status Pill */}
+            <div className="min-h-[38px] flex items-center gap-1.5 px-3 rounded-lg border border-line bg-surface text-xs font-semibold text-ink">
               <span className={`w-2 h-2 rounded-full shrink-0 ${systemStatus.dot}`} aria-hidden="true" />
               <span>{systemStatus.label}</span>
             </div>
 
             {/* Precision Kiosk Clock */}
-            <div className="hidden md:flex flex-col items-end justify-center text-right pl-1">
-              <span className="text-[11px] text-secondary font-bold leading-tight">{dateStr}</span>
-              <span className="text-xs font-extrabold tracking-tight text-ink leading-tight">{timeStr}</span>
+            <div className="hidden md:flex flex-col items-end justify-center text-right pl-2 border-l border-line">
+              <span className="text-[11px] text-secondary font-medium leading-tight">{dateStr}</span>
+              <span className="text-xs font-bold tracking-tight text-ink leading-tight">{timeStr}</span>
             </div>
           </div>
         </header>
 
-        {/* Backend Standby Notice - Compact & Cleanly Dismissible */}
-        {backendOnline === false && !demoMode && !bannerDismissed && (
-          <div className="my-1.5 p-2 sm:p-2.5 rounded-xl bg-surface border border-warning flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-xs shrink-0">
-            <div className="flex items-center gap-2 text-xs font-bold text-warning-ink">
-              <FiAlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span>Cloud connection standby. Local campus knowledge engine & voice are active.</span>
-            </div>
-            <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
-              <button
-                type="button"
-                onClick={handleRetry}
-                className="min-h-[36px] px-3 py-1 rounded-lg bg-warning text-ink text-xs font-bold hover:bg-warning/90 motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent"
-              >
-                Retry
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setDemoMode(true);
-                  setBannerDismissed(true);
-                }}
-                className="min-h-[36px] px-3 py-1 rounded-lg border border-warning text-warning-ink text-xs font-bold hover:bg-warning/10 motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent"
-              >
-                Continue in Local Mode
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Main Kiosk Touchscreen Operational Grid */}
-        <main className="flex-1 my-1.5 lg:my-2 grid grid-cols-1 lg:grid-cols-[285px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)] 2xl:grid-cols-[350px_minmax(0,1fr)] gap-2.5 lg:gap-3.5 items-stretch min-h-0 overflow-hidden">
+        {/* Main Kiosk Grid: Left Directory & Right Integrated Stage */}
+        <main className="flex-1 my-2.5 grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[330px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)] gap-3.5 items-stretch min-h-0 overflow-hidden">
           
-          {/* Left Column: Structured Department Category Menus & Language Switcher */}
-          <div className="flex flex-col gap-2 min-h-0 justify-between h-full">
+          {/* Left Column: Campus Services Directory & Language Selection */}
+          <aside className="flex flex-col gap-2.5 min-h-0 justify-between h-full bg-surface border border-line rounded-2xl p-3.5">
             <div>
-              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-ink leading-tight">
+              <h1 className="text-lg font-bold tracking-tight text-ink leading-snug">
                 {t.heading}
               </h1>
-              <p className="text-xs font-semibold text-secondary mt-0.5 line-clamp-2">
+              <p className="text-xs font-medium text-secondary mt-0.5">
                 {t.subtitle}
               </p>
+
+              {/* Category Filter Pills */}
+              <div className="flex flex-wrap gap-1 mt-2.5 pb-2 border-b border-line">
+                {t.categoryFilters.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-2 py-0.5 rounded text-[11px] font-semibold motion-safe:transition-colors ${
+                      selectedCategory === cat.id
+                        ? "bg-ink text-surface"
+                        : "bg-ground text-secondary hover:text-ink"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Department Category Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1.5 my-auto" role="group" aria-label="Department category directory">
-              {t.categoryMenus.map(({ id, label, icon: Icon, hint, prompt }) => {
+            {/* Directory Inquiries List (Single Source of Truth) */}
+            <nav className="flex-1 overflow-y-auto space-y-1.5 scroll-slim my-1" aria-label="Campus Directory Inquiries">
+              {filteredTopics.map((item) => {
+                const Icon = item.icon;
                 const isBusy = conversation.busy || voice.recording;
                 return (
                   <button
-                    key={id}
+                    key={item.id}
                     type="button"
-                    onClick={() => !isBusy && executeQuery(prompt)}
+                    onClick={() => !isBusy && executeQuery(item.prompt)}
                     disabled={isBusy}
-                    className="min-h-[46px] lg:min-h-[48px] p-2.5 lg:p-3 rounded-2xl bg-surface border border-line hover:border-line-strong hover:bg-surface-muted disabled:opacity-50 disabled:cursor-not-allowed motion-safe:transition-colors flex items-center justify-between gap-2.5 text-left shadow-2xs focus-visible:outline-2 focus-visible:outline-accent"
+                    className="w-full p-2.5 rounded-xl border border-line bg-surface hover:bg-surface-muted hover:border-line-strong text-left motion-safe:transition-colors flex items-start gap-2.5 focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <Icon className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
-                      <div className="min-w-0">
-                        <div className="text-xs sm:text-sm font-bold text-ink leading-tight">{label}</div>
-                        <div className="text-xs font-medium text-secondary truncate">{hint}</div>
-                      </div>
+                    <span className="w-7 h-7 rounded-lg bg-ground border border-line flex items-center justify-center text-accent shrink-0 mt-0.5">
+                      <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-bold text-ink leading-tight">{item.title}</div>
+                      <div className="text-[11px] font-medium text-secondary mt-0.5 truncate">{item.subtitle}</div>
                     </div>
                   </button>
                 );
               })}
-            </div>
+            </nav>
 
-            {/* Language Switcher Bar with Visible Label */}
-            <div className="shrink-0 pt-0.5">
-              <div className="text-xs font-bold text-secondary flex items-center gap-1.5 mb-1 px-0.5">
+            {/* Language Switcher Fieldset (Single Label, No Duplication) */}
+            <fieldset className="pt-2 border-t border-line">
+              <legend className="text-xs font-semibold text-secondary mb-1 flex items-center gap-1.5">
                 <FiGlobe className="w-3.5 h-3.5 text-accent" aria-hidden="true" />
                 <span>{t.langScope}</span>
-              </div>
-              <fieldset
-                className="flex items-center p-1 bg-surface rounded-xl border border-line shadow-2xs"
-                aria-label={t.langScope}
-              >
-                <legend className="sr-only">{t.langScope}</legend>
+              </legend>
+              <div className="flex gap-1">
                 {(
                   [
                     { code: "en", label: "English" },
@@ -821,34 +833,29 @@ export function KioskShell() {
                     type="button"
                     onClick={() => handleLanguageChange(lCode.code)}
                     aria-pressed={lang === lCode.code}
-                    className={`flex-1 min-h-[36px] py-1 text-xs font-bold rounded-lg motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent flex items-center justify-center ${
+                    className={`flex-1 min-h-[34px] py-1 text-xs font-semibold rounded-lg motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent ${
                       lang === lCode.code
-                        ? "bg-ink text-surface shadow-2xs"
-                        : "text-secondary hover:text-ink hover:bg-surface-muted"
+                        ? "bg-accent text-accent-foreground"
+                        : "bg-ground text-secondary hover:text-ink hover:bg-surface-muted"
                     }`}
                   >
                     {lCode.label}
                   </button>
                 ))}
-              </fieldset>
-            </div>
-          </div>
+              </div>
+            </fieldset>
+          </aside>
 
-          {/* Center Stage: Unified White Rounded Card Holding Robot & Live Dialogue */}
-          <div className="rounded-2xl lg:rounded-3xl bg-surface border border-line p-3 lg:p-3.5 flex flex-col min-h-0 h-full shadow-xs gap-2 min-w-0 max-w-full overflow-hidden">
+          {/* Center Stage: Seamless Architectural Surface (Zero Card-in-Card Nesting) */}
+          <section className="bg-surface border border-line rounded-2xl flex flex-col min-h-0 h-full p-4 gap-3 min-w-0 max-w-full overflow-hidden">
             
-            {/* 1. Top Row: State Pill, Live Dialogue Label, Clear Dialogue */}
-            <div className="flex items-center justify-between pb-1.5 border-b border-line shrink-0 min-h-[34px]">
-              {/* Unified State Pill */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ground border border-line text-xs font-bold text-ink">
-                <span className={`w-2 h-2 rounded-full shrink-0 ${systemStatus.dot}`} aria-hidden="true" />
-                <span>{systemStatus.label}</span>
+            {/* Stage Bar: Assistant Identity + Clear Action */}
+            <div className="flex items-center justify-between pb-2 border-b border-line shrink-0 min-h-[34px]">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-accent" aria-hidden="true" />
+                <span className="text-xs sm:text-sm font-bold text-ink">{t.assistantLabel}</span>
               </div>
 
-              {/* Live Dialogue Label */}
-              <span className="text-xs sm:text-sm font-bold text-secondary">{t.liveDialogue}</span>
-
-              {/* Clear Dialogue Button */}
               <button
                 type="button"
                 onClick={() => {
@@ -859,44 +866,35 @@ export function KioskShell() {
                   stopSpeaking();
                   setDeskBellNotified(false);
                 }}
-                className="min-h-[34px] text-xs font-bold text-secondary hover:text-ink flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-accent rounded-lg px-2.5 py-1 motion-safe:transition-colors"
+                className="text-xs font-semibold text-secondary hover:text-ink flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-accent rounded px-2 py-1 motion-safe:transition-colors cursor-pointer"
               >
                 <FiTrash2 className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>{t.clear}</span>
               </button>
             </div>
 
-            {/* 2. Robot Area: Fully Reactive 3D Avatar & Flanked Speech Bubbles */}
-            <div className="h-[125px] sm:h-[135px] lg:h-[140px] shrink-0 relative flex items-center justify-center px-1">
-              <div
-                className={`w-full h-full flex flex-col items-center justify-center gap-2.5 lg:gap-3 ${
-                  conversation.transcript || liveInterim
-                    ? "md:grid md:grid-cols-[minmax(0,1fr)_125px_minmax(0,1fr)] lg:grid-cols-[minmax(0,1fr)_135px_minmax(0,1fr)] xl:grid-cols-[minmax(0,1fr)_145px_minmax(0,1fr)]"
-                    : "md:flex md:flex-row md:items-center md:justify-center md:gap-4 lg:gap-6"
-                }`}
-              >
-                {/* Left Speech Bubble: Visitor Speech / Live Interim Stream */}
-                {conversation.transcript || liveInterim ? (
-                  <div className="w-full flex justify-end min-w-0">
-                    <div className="relative p-2.5 rounded-xl bg-ground border border-line shadow-xs max-h-[110px] sm:max-h-[120px] overflow-y-auto scroll-slim w-full max-w-[260px]">
-                      <div className="text-xs font-bold text-secondary mb-0.5 flex items-center justify-between">
+            {/* Stage Hero: 3D Robot & Real-Time Flanked Speech Prompts */}
+            <div className="shrink-0 relative flex items-center justify-center py-1">
+              <div className="w-full flex flex-col md:flex-row items-center justify-center gap-3 lg:gap-4 max-w-3xl">
+                
+                {/* Left: Visitor Transcript / Interim Stream */}
+                {(conversation.transcript || liveInterim) && (
+                  <div className="w-full md:w-1/2 flex justify-end min-w-0">
+                    <div className="p-3 rounded-xl bg-ground border border-line max-h-[115px] overflow-y-auto scroll-slim w-full max-w-[280px]">
+                      <div className="text-[11px] font-bold text-secondary mb-0.5 flex items-center justify-between">
                         <span>Visitor</span>
                         {liveInterim && (
-                          <span className="text-[10px] font-bold text-accent animate-pulse">Streaming live…</span>
+                          <span className="text-[10px] font-bold text-accent animate-pulse">Live speech…</span>
                         )}
                       </div>
-                      <p className="text-xs sm:text-sm font-bold text-ink leading-snug line-clamp-3">
+                      <p className="text-xs sm:text-sm font-semibold text-ink leading-snug line-clamp-3">
                         {liveInterim ? `${liveInterim}…` : conversation.transcript}
                       </p>
-                      <span
-                        className="hidden md:block absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-ground border-t border-r border-line rotate-45 rounded-[2px]"
-                        aria-hidden="true"
-                      />
                     </div>
                   </div>
-                ) : null}
+                )}
 
-                {/* Center: Interactive CampusRobot Avatar with Antenna Glow & Breathing */}
+                {/* Center: Integrated 3D Robot Stage */}
                 <div
                   onClick={handleRobotClick}
                   onKeyDown={(e) => {
@@ -907,45 +905,39 @@ export function KioskShell() {
                   }}
                   tabIndex={0}
                   role="button"
-                  aria-label="CampusAI robot receptionist. Tap to interact."
-                  className="relative w-[105px] h-[105px] sm:w-[120px] sm:h-[120px] lg:w-[130px] lg:h-[130px] flex items-center justify-center shrink-0 mx-auto cursor-pointer group focus-visible:outline-2 focus-visible:outline-accent rounded-full"
+                  aria-label="Campus robot assistant. Tap to interact."
+                  className="relative w-[110px] h-[110px] sm:w-[125px] sm:h-[125px] flex items-center justify-center shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-accent rounded-full"
                   title="Tap robot to interact"
                 >
-                  {/* Expanding Sound Rings while state is 'speaking' */}
+                  {/* Calibrated sound waves during speech */}
                   {conversation.state === "speaking" && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0" aria-hidden="true">
-                      <div className="motion-safe:animate-sound-ring-1 absolute w-22 h-22 sm:w-26 sm:h-26 lg:w-28 lg:h-28 rounded-full border-2 border-accent" />
-                      <div className="motion-safe:animate-sound-ring-2 absolute w-22 h-22 sm:w-26 sm:h-26 lg:w-28 lg:h-28 rounded-full border-2 border-accent" />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+                      <div className="motion-safe:animate-sound-ring-1 absolute w-24 h-24 rounded-full border border-accent/60" />
+                      <div className="motion-safe:animate-sound-ring-2 absolute w-24 h-24 rounded-full border border-accent/40" />
                     </div>
                   )}
 
-                  {/* Circular Pedestal behind robot */}
-                  <div className="absolute w-22 h-22 sm:w-26 sm:h-26 lg:w-28 lg:h-28 rounded-full bg-surface-muted border border-line z-0" aria-hidden="true" />
+                  {/* Clean Stage Pedestal */}
+                  <div className="absolute inset-1 rounded-full bg-ground border border-line" aria-hidden="true" />
 
-                  {/* 3D Robot Canvas */}
+                  {/* Three.js Canvas */}
                   <div className="relative w-full h-full z-10" aria-hidden="true">
                     <CampusRobot state={conversation.state} distance={8.5} />
                   </div>
                 </div>
 
-                {/* Right Speech Bubble: "CampusAI" Live Reply */}
+                {/* Right: CampusAI Live Response Bubble */}
                 {liveGreeting && (
-                  <div className={`min-w-0 flex justify-start w-full ${conversation.transcript || liveInterim ? "flex-1" : "md:w-auto"}`}>
+                  <div className={`w-full ${conversation.transcript || liveInterim ? "md:w-1/2" : "md:max-w-md"} min-w-0 flex justify-start`}>
                     <div
-                      className={`relative p-2.5 sm:p-3 rounded-xl bg-accent text-accent-foreground shadow-xs max-h-[110px] sm:max-h-[120px] overflow-y-auto scroll-slim w-full ${
-                        conversation.transcript || liveInterim ? "max-w-[290px]" : "md:max-w-[360px] lg:max-w-[420px]"
-                      }`}
+                      className="p-3 rounded-xl bg-accent text-accent-foreground max-h-[115px] overflow-y-auto scroll-slim w-full"
                       role="status"
                       aria-live="polite"
                     >
-                      <span
-                        className="hidden md:block absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-accent rotate-45 rounded-[2px]"
-                        aria-hidden="true"
-                      />
-                      <div className="text-xs font-bold text-accent-foreground/90 mb-0.5 flex items-center justify-between">
-                        <span>CampusAI</span>
+                      <div className="text-[11px] font-bold text-accent-foreground/80 mb-0.5">
+                        CampusAI
                       </div>
-                      <p className="text-xs sm:text-sm font-medium text-accent-foreground leading-snug line-clamp-3">
+                      <p className="text-xs sm:text-sm font-medium leading-snug line-clamp-3">
                         {liveGreeting}
                       </p>
                     </div>
@@ -955,65 +947,44 @@ export function KioskShell() {
               </div>
             </div>
 
-            {/* 3. Dialogue Feed: Scrollable Box Taking Full Remaining Space */}
-            <div className="flex-1 min-h-0 bg-ground border border-line rounded-xl lg:rounded-2xl p-2.5 sm:p-3 overflow-y-auto space-y-2.5 scroll-slim">
+            {/* Conversation Flow Area (Clean, Open Stream) */}
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-3 scroll-slim pr-1">
               {!conversation.transcript && !conversation.reply ? (
-                /* Walk-Up Attract Mode & Instant 1-Tap FAQ Starters */
-                <div className="flex flex-col items-center justify-center h-full text-center py-2 px-2 text-secondary text-xs">
-                  <span className="w-8 h-8 rounded-full bg-accent/15 flex items-center justify-center text-accent mb-1 animate-pulse">
-                    <FiMic className="w-4 h-4" />
-                  </span>
-                  <div className="font-extrabold text-ink text-sm sm:text-base">{t.readyVoice}</div>
-                  <div className="mt-0.5 font-medium max-w-sm">{t.readyHint}</div>
-
-                  {/* 1-Tap Instant FAQ Starter Pills */}
-                  <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 max-w-md">
-                    {t.starters.map((starter) => (
-                      <button
-                        key={starter.label}
-                        type="button"
-                        onClick={() => executeQuery(starter.query)}
-                        className="px-2.5 py-1 rounded-full bg-surface border border-line hover:border-accent hover:text-ink text-secondary font-bold text-[11px] shadow-2xs motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent cursor-pointer"
-                      >
-                        {starter.label}
-                      </button>
-                    ))}
+                /* Idle Attract State: Clean, Direct, Respectful */
+                <div className="flex flex-col items-center justify-center h-full text-center py-4 px-3 text-secondary">
+                  <div className="w-10 h-10 rounded-full bg-accent-surface border border-accent/20 flex items-center justify-center text-accent mb-2">
+                    <FiMic className="w-5 h-5" />
                   </div>
-
-                  {/* Dynamic Time-Aware Campus Pulse Ticker */}
-                  <div className="mt-3 pt-2 border-t border-line/60 w-full max-w-md flex items-center justify-between text-[10px] font-bold text-secondary">
-                    <span className="flex items-center gap-1.5">
-                      <span className={`w-2 h-2 rounded-full shrink-0 ${campusPulse.dot} animate-pulse`} />
-                      <span className="text-ink">{campusPulse.badge}</span>
-                    </span>
-                    <span className="truncate max-w-[240px] text-secondary font-medium">{campusPulse.detail}</span>
-                  </div>
+                  <h2 className="text-base font-bold text-ink">{t.readyVoice}</h2>
+                  <p className="text-xs font-medium max-w-sm mt-1 text-secondary">
+                    {t.readyHint}
+                  </p>
                 </div>
               ) : (
                 <>
-                  {/* Visitor Bubble (right side) */}
+                  {/* Visitor Bubble */}
                   {conversation.transcript && (
-                    <div className="self-end ml-auto bg-surface border border-line text-xs sm:text-sm text-ink p-2.5 sm:p-3 rounded-2xl rounded-tr-xs max-w-[85%] sm:max-w-[75%] shadow-2xs">
-                      <div className="text-xs text-secondary font-bold mb-0.5">Visitor</div>
+                    <div className="self-end ml-auto bg-ground border border-line text-xs sm:text-sm text-ink p-3 rounded-xl max-w-[85%] sm:max-w-[75%]">
+                      <div className="text-[11px] text-secondary font-bold mb-0.5">Visitor</div>
                       <div className="font-semibold">{conversation.transcript}</div>
                     </div>
                   )}
 
-                  {/* Searching Spinner */}
+                  {/* Processing Status */}
                   {conversation.state === "thinking" && (
-                    <div className="self-start text-xs font-bold text-secondary flex items-center gap-2 px-1">
+                    <div className="self-start text-xs font-semibold text-secondary flex items-center gap-2 px-1">
                       <Spinner />
                       <span>{t.searchingDb}</span>
                     </div>
                   )}
 
-                  {/* CampusAI Bubble (left side in accent color) with Rich Action Cards */}
+                  {/* Assistant Reply with Rich Action Cards */}
                   {conversation.reply && (
-                    <div className="self-start mr-auto bg-accent text-accent-foreground text-xs sm:text-sm p-3 rounded-2xl rounded-tl-xs max-w-[92%] sm:max-w-[85%] shadow-2xs leading-relaxed space-y-2">
-                      <div className="text-xs opacity-90 font-bold">CampusAI</div>
-                      <div>{conversation.reply}</div>
+                    <div className="self-start mr-auto bg-accent-surface border border-accent/20 text-ink text-xs sm:text-sm p-3.5 rounded-xl max-w-[92%] sm:max-w-[85%] space-y-2.5">
+                      <div className="text-[11px] text-accent font-bold">CampusAI</div>
+                      <div className="leading-relaxed">{conversation.reply}</div>
 
-                      {/* Interactive Rich Widgets Based on Intent */}
+                      {/* Interactive Rich Widgets Based on Grounded Data */}
                       {activeRecord?.locationDetails && (
                         <WayfindingCard
                           location={activeRecord.locationDetails}
@@ -1037,12 +1008,12 @@ export function KioskShell() {
                         />
                       )}
 
-                      {/* Context-Aware Dynamic Follow-Up Chips */}
+                      {/* Context-Aware Dynamic Follow-Up Actions */}
                       {activeRecord?.followUps && activeRecord.followUps.length > 0 && (
-                        <div className="pt-2 border-t border-accent-foreground/20 space-y-1.5">
-                          <div className="text-[10px] uppercase tracking-wider font-extrabold text-accent-foreground/80 flex items-center gap-1">
-                            <FiCornerDownRight className="w-3 h-3" />
-                            <span>Suggested Follow-Ups</span>
+                        <div className="pt-2 border-t border-accent/15 space-y-1.5">
+                          <div className="text-[10px] font-bold text-secondary flex items-center gap-1">
+                            <FiCornerDownRight className="w-3 h-3 text-accent" />
+                            <span>Related Inquiries</span>
                           </div>
                           <div className="flex flex-wrap gap-1.5">
                             {activeRecord.followUps.map((chipText) => (
@@ -1050,7 +1021,7 @@ export function KioskShell() {
                                 key={chipText}
                                 type="button"
                                 onClick={() => executeQuery(chipText)}
-                                className="px-2.5 py-1 rounded-full bg-surface text-ink hover:bg-surface-muted text-xs font-bold shadow-2xs motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent cursor-pointer"
+                                className="px-2.5 py-1 rounded-md bg-surface border border-line text-ink hover:bg-surface-muted text-xs font-semibold motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent cursor-pointer"
                               >
                                 {chipText}
                               </button>
@@ -1059,24 +1030,24 @@ export function KioskShell() {
                         </div>
                       )}
 
-                      {/* Human Receptionist Escalation Handoff */}
-                      <div className="pt-2 border-t border-accent-foreground/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      {/* Staff Desk Escalation Action */}
+                      <div className="pt-2 border-t border-accent/15 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         {deskBellNotified ? (
-                          <div className="flex items-center gap-1.5 text-xs font-bold text-accent-foreground bg-accent-foreground/20 px-2.5 py-1.5 rounded-lg">
-                            <FiCheckCircle className="w-4 h-4 text-emerald-300 shrink-0" />
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                            <FiCheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                             <span>{t.humanDeskSent}</span>
                           </div>
                         ) : (
                           <button
                             type="button"
                             onClick={handleRingDeskBell}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface text-ink hover:bg-surface-muted text-xs font-bold shadow-2xs motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface border border-line text-ink hover:bg-surface-muted text-xs font-semibold motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent cursor-pointer"
                           >
                             <FiBell className="w-3.5 h-3.5 text-accent" />
                             <span>{t.humanDesk}</span>
                           </button>
                         )}
-                        <span className="text-[10px] opacity-75 font-medium">Counter 1 • Ext 101</span>
+                        <span className="text-[11px] text-secondary font-medium">Counter 1 • Ext 101</span>
                       </div>
                     </div>
                   )}
@@ -1085,43 +1056,38 @@ export function KioskShell() {
               )}
             </div>
 
-            {/* 4. Bottom Row: Fixed Touch Action Bar (Microphone CTA + Typed Input Form) */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1.5 border-t border-line shrink-0">
+            {/* Action Bar: Voice CTA + Input Field */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2 border-t border-line shrink-0">
               
-              {/* Primary Large Microphone CTA Button */}
+              {/* Primary Speak CTA */}
               <button
                 type="button"
                 onClick={handleStartVoice}
                 disabled={conversation.busy}
-                className="w-full sm:w-[180px] md:w-[195px] lg:w-[210px] xl:w-[230px] h-11 lg:h-12 px-3 rounded-xl bg-accent text-accent-foreground font-bold flex items-center justify-between shadow-xs hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent shrink-0 cursor-pointer"
+                className="w-full sm:w-[190px] md:w-[210px] h-11 px-3.5 rounded-xl bg-accent text-accent-foreground font-semibold flex items-center justify-between hover:bg-accent-hover disabled:opacity-50 motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent shrink-0 cursor-pointer"
               >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="w-8 h-8 rounded-full bg-accent-foreground/20 flex items-center justify-center shrink-0">
-                    <FiMic className="w-4 h-4 text-accent-foreground" aria-hidden="true" />
-                  </span>
-                  <span className="text-xs sm:text-sm font-extrabold text-left leading-tight truncate" aria-live="polite">
+                <div className="flex items-center gap-2 min-w-0">
+                  <FiMic className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  <span className="text-xs sm:text-sm font-bold truncate">
                     {speakButtonLabel}
                   </span>
                 </div>
 
-                {/* Dynamic Waveform Bars (only shown while listening, animated) */}
+                {/* Animated Waveform when listening */}
                 {conversation.state === "listening" && (
-                  <div className="flex items-center gap-0.5 h-4 shrink-0" aria-hidden="true">
-                    {[35, 75, 45, 95, 60, 40, 85, 50, 80, 35].map((h, i) => (
+                  <div className="flex items-center gap-0.5 h-3.5 shrink-0" aria-hidden="true">
+                    {[30, 80, 50, 95, 60, 40, 85, 45].map((h, i) => (
                       <span
-                        key={`waveform-bar-${i}`}
+                        key={`bar-${i}`}
                         className="w-0.5 bg-accent-foreground rounded-full motion-safe:animate-wave-bar"
-                        style={{
-                          height: `${h}%`,
-                          animationDelay: `${i * 80}ms`,
-                        }}
+                        style={{ height: `${h}%`, animationDelay: `${i * 90}ms` }}
                       />
                     ))}
                   </div>
                 )}
               </button>
 
-              {/* Typed Inquiry Form with High-Contrast Active Send Button */}
+              {/* Typed Input */}
               <form onSubmit={handleSendTyped} className="flex-1 flex items-center gap-2 min-w-0 w-full">
                 <input
                   type="text"
@@ -1130,17 +1096,17 @@ export function KioskShell() {
                   onChange={(e) => setTypedMessage(e.target.value)}
                   onFocus={() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })}
                   disabled={conversation.busy || voice.recording}
-                  className="flex-1 h-11 lg:h-12 rounded-xl bg-ground border border-line px-3 sm:px-3.5 text-xs sm:text-sm text-ink placeholder:text-secondary focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50 min-w-0 font-medium"
+                  className="flex-1 h-11 rounded-xl bg-ground border border-line px-3 text-xs sm:text-sm text-ink placeholder:text-secondary focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50 font-medium"
                 />
                 <button
                   type="submit"
                   disabled={!hasTypedContent || conversation.busy || voice.recording}
-                  className={`w-11 h-11 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center shrink-0 shadow-2xs motion-safe:transition-all focus-visible:outline-2 focus-visible:outline-accent ${
+                  className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-accent ${
                     hasTypedContent
-                      ? "bg-accent text-accent-foreground hover:bg-accent-hover cursor-pointer"
+                      ? "bg-ink text-surface hover:bg-secondary cursor-pointer"
                       : "bg-surface border border-line text-secondary/30 opacity-40 cursor-not-allowed"
                   }`}
-                  aria-label="Send inquiry"
+                  aria-label="Send message"
                 >
                   <FiSend className="w-4 h-4" aria-hidden="true" />
                 </button>
@@ -1148,36 +1114,34 @@ export function KioskShell() {
 
             </div>
 
-          </div>
+          </section>
 
         </main>
 
-        {/* Footer Status Bar with Defensive Inset so Next.js or browser UI never covers text */}
-        <footer className="pt-1.5 border-t border-line flex flex-wrap items-center justify-between gap-2 text-xs text-secondary font-bold shrink-0 min-h-[28px] pl-2 sm:pl-0">
-          <div className="flex items-center">
-            <span>Autonomous reception robot for campus visitors. No audio stored on-device.</span>
+        {/* Footer: Honest, Grounded Station Baseline */}
+        <footer className="pt-2 border-t border-line flex flex-wrap items-center justify-between gap-2 text-xs text-secondary font-medium shrink-0 min-h-[26px]">
+          <div>
+            <span>{t.footerDisclaimer}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[11px] font-semibold text-secondary/80">
-              CampusAI Kiosk OS • Station Active
-            </span>
+          <div>
+            <span>{t.footerStation}</span>
           </div>
         </footer>
 
       </div>
 
-      {/* Secret 5-Tap Technician Diagnostics & Security Modal */}
+      {/* Secret 5-Tap Technician Diagnostics Modal */}
       {adminModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-surface-dark/70 backdrop-blur-xs p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-surface-dark/70 p-4"
           role="dialog"
           aria-modal="true"
         >
           <div className="w-full max-w-md rounded-2xl bg-surface border border-line p-5 shadow-2xl text-ink space-y-4">
             <div className="flex items-center justify-between border-b border-line pb-3">
-              <div className="flex items-center gap-2 text-sm font-extrabold text-ink">
+              <div className="flex items-center gap-2 text-sm font-bold text-ink">
                 <FiLock className="w-4 h-4 text-accent" />
-                <span>Kiosk Hardware & Technician Console</span>
+                <span>Station Technician Diagnostics</span>
               </div>
               <button
                 type="button"
@@ -1186,56 +1150,43 @@ export function KioskShell() {
                   setAdminPin("");
                   setAdminError(false);
                 }}
-                className="p-1 rounded-lg hover:bg-surface-muted text-secondary hover:text-ink cursor-pointer"
+                className="p-1 rounded hover:bg-surface-muted text-secondary hover:text-ink cursor-pointer"
               >
                 <FiX className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Diagnostic Vitals Dashboard */}
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="p-2.5 rounded-xl bg-ground border border-line space-y-1">
-                <div className="text-[11px] font-bold text-secondary">Audio Input Status</div>
-                <div className="flex items-center gap-1.5 font-extrabold text-emerald-600">
+                <div className="text-[11px] font-semibold text-secondary">Audio Subsystem</div>
+                <div className="flex items-center gap-1.5 font-bold text-emerald-600">
                   <FiCheck className="w-3.5 h-3.5" />
                   <span>Microphone Ready</span>
                 </div>
-                {/* Visual Audio VU Meter Simulation */}
-                <div className="flex gap-1 h-1.5 pt-1">
-                  <span className="flex-1 bg-emerald-500 rounded-full" />
-                  <span className="flex-1 bg-emerald-500 rounded-full" />
-                  <span className="flex-1 bg-emerald-500 rounded-full" />
-                  <span className="flex-1 bg-amber-400 rounded-full" />
-                  <span className="flex-1 bg-line rounded-full" />
-                </div>
               </div>
 
               <div className="p-2.5 rounded-xl bg-ground border border-line space-y-1">
-                <div className="text-[11px] font-bold text-secondary">Local Knowledge Base</div>
-                <div className="flex items-center gap-1.5 font-extrabold text-emerald-600">
+                <div className="text-[11px] font-semibold text-secondary">Knowledge Base</div>
+                <div className="flex items-center gap-1.5 font-bold text-emerald-600">
                   <FiCheck className="w-3.5 h-3.5" />
-                  <span>5 Records Grounded</span>
+                  <span>5 Grounded Entries</span>
                 </div>
-                <div className="text-[10px] text-secondary font-medium">Offline Fast Vector Cache</div>
               </div>
 
               <div className="p-2.5 rounded-xl bg-ground border border-line space-y-1">
-                <div className="text-[11px] font-bold text-secondary">Backend Network Ping</div>
+                <div className="text-[11px] font-semibold text-secondary">Backend Connectivity</div>
                 <div className="flex items-center gap-1.5 font-bold text-ink">
                   <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>{backendOnline ? "Online (22ms)" : "Standby (Local Active)"}</span>
+                  <span>{backendOnline ? "Online (Healthy)" : "Offline (Local Engine Active)"}</span>
                 </div>
-                <div className="text-[10px] text-secondary font-medium">Auto-ping every 30s</div>
               </div>
 
               <div className="p-2.5 rounded-xl bg-ground border border-line space-y-1">
-                <div className="text-[11px] font-bold text-secondary">Display Mode</div>
-                <div className="font-extrabold text-ink">100dvh Lock</div>
-                <div className="text-[10px] text-secondary font-medium">Touchscreen Kiosk OS</div>
+                <div className="text-[11px] font-semibold text-secondary">Display Mode</div>
+                <div className="font-bold text-ink">100dvh Lock</div>
               </div>
             </div>
 
-            {/* Maintenance Action Buttons */}
             <div className="flex gap-2 pt-1 border-t border-line">
               <button
                 type="button"
@@ -1247,10 +1198,10 @@ export function KioskShell() {
                   setAdminModalOpen(false);
                   playKioskSound("success");
                 }}
-                className="flex-1 py-2 px-3 rounded-xl bg-ground border border-line hover:bg-surface-muted text-xs font-bold text-ink flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 py-2 px-3 rounded-lg bg-ground border border-line hover:bg-surface-muted text-xs font-semibold text-ink flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <FiRefreshCw className="w-3.5 h-3.5 text-accent" />
-                <span>Restart Session</span>
+                <span>Reset Session</span>
               </button>
 
               <button
@@ -1259,16 +1210,15 @@ export function KioskShell() {
                   setAdminModalOpen(false);
                   setHardwareDrawerOpen(true);
                 }}
-                className="flex-1 py-2 px-3 rounded-xl bg-accent text-accent-foreground text-xs font-bold hover:bg-accent-hover flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 py-2 px-3 rounded-lg bg-accent text-accent-foreground text-xs font-semibold hover:bg-accent-hover flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <FiCpu className="w-3.5 h-3.5" />
                 <span>ESP32 Blueprint</span>
               </button>
             </div>
 
-            {/* PIN Unlock for Engineering Deep-Dive */}
             <form onSubmit={handleAdminPinSubmit} className="pt-2 border-t border-line space-y-2">
-              <div className="text-[11px] font-bold text-secondary">Enter Admin PIN for System Settings:</div>
+              <div className="text-[11px] font-medium text-secondary">Enter Admin PIN (Default: 1234):</div>
               <div className="flex gap-2">
                 <input
                   type="password"
@@ -1278,18 +1228,18 @@ export function KioskShell() {
                     setAdminPin(e.target.value);
                     setAdminError(false);
                   }}
-                  placeholder="PIN (1234)"
-                  className="flex-1 h-9 rounded-xl bg-ground border border-line px-3 text-center text-sm tracking-widest font-mono text-ink focus-visible:outline-2 focus-visible:outline-accent"
+                  placeholder="PIN"
+                  className="flex-1 h-9 rounded-lg bg-ground border border-line px-3 text-center text-sm tracking-widest font-mono text-ink focus-visible:outline-2 focus-visible:outline-accent"
                 />
                 <button
                   type="submit"
-                  className="px-4 h-9 rounded-xl bg-accent text-accent-foreground text-xs font-bold hover:bg-accent-hover cursor-pointer"
+                  className="px-4 h-9 rounded-lg bg-accent text-accent-foreground text-xs font-semibold hover:bg-accent-hover cursor-pointer"
                 >
                   Unlock
                 </button>
               </div>
               {adminError && (
-                <div className="text-xs text-destructive font-bold text-center">
+                <div className="text-xs text-destructive font-semibold text-center">
                   Invalid PIN. Default is 1234.
                 </div>
               )}
