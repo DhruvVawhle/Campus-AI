@@ -61,7 +61,7 @@ export interface SLRTCEKnowledgeRecord {
 }
 
 export const SLRTCE_CATEGORIES: { id: SLRTCEDepartmentCategory; labelEn: string; labelHi: string; labelMr: string; labelHinglish: string }[] = [
-  { id: "all", labelEn: "All Topics", labelHi: "सभी विषय", labelMr: "सर्व विषय", labelHinglish: "All Topics" },
+  { id: "all", labelEn: "All", labelHi: "सभी", labelMr: "सर्व", labelHinglish: "All" },
   { id: "faculty", labelEn: "Faculty", labelHi: "प्राध्यापक", labelMr: "प्राध्यापक", labelHinglish: "Faculty" },
   { id: "admissions", labelEn: "Admissions", labelHi: "प्रवेश", labelMr: "प्रवेश", labelHinglish: "Admissions" },
   { id: "exams", labelEn: "Exams", labelHi: "परीक्षा", labelMr: "परीक्षा", labelHinglish: "Exams" },
@@ -123,19 +123,22 @@ export const SLRTCE_DIRECTORY: SLRTCEDirectoryTopic[] = [
 
 export const SLRTCE_QUICK_PROMPTS = [
   {
-    label: "How do I reach the Exam Cell?",
-    prompt: "How do I reach the Exam Cell?",
-    icon: FiCalendar,
+    label: "Locate a Faculty Cabin",
+    prompt: "Where is Dr. Rajesh Sharma's cabin in West Wing?",
+    icon: FiMapPin,
+    subtitle: "HOD cabins & staff rooms across Block A & C",
   },
   {
-    label: "What documents are needed for First Year Engineering admission?",
+    label: "2026 Admission Checklist",
     prompt: "What documents are needed for First Year Engineering admission?",
     icon: LuGraduationCap,
+    subtitle: "CAP round eligibility, fees & required certificates",
   },
   {
-    label: "Is the Central Library open right now?",
-    prompt: "Is the Central Library open right now?",
+    label: "Today's Campus Hours",
+    prompt: "When does the central library and reading hall open?",
     icon: FiInfo,
+    subtitle: "Reading hall, administrative desks & exam cell timings",
   },
 ];
 
@@ -287,8 +290,8 @@ export const SLRTCE_KNOWLEDGE_BASE: SLRTCEKnowledgeRecord[] = [
     },
     followUps: [
       "Check Dr. Sharma's consulting hours",
-      "Show floor route map to C-301",
-      "Send directions to my phone",
+      "Computer Engineering Faculty List",
+      "Contact Department Secretary",
     ],
   },
   {
@@ -318,9 +321,9 @@ export const SLRTCE_KNOWLEDGE_BASE: SLRTCEKnowledgeRecord[] = [
       },
     },
     followUps: [
-      "Show route to A-202",
-      "Check AI-DS curriculum details",
-      "Send directions to phone",
+      "AI & DS Department Faculty",
+      "GPU Machine Learning Lab Specs",
+      "Contact Department Coordinator",
     ],
   },
   {

@@ -82,59 +82,60 @@ export function WayfindingCard({ location, title, qrUri, onOpenDrawer }: Wayfind
       )}
 
       {/* Interactive SVG Floor Plan Mini-Map */}
-      <div className="relative rounded-lg bg-ground border border-line p-2 overflow-hidden">
-        <div className="flex items-center justify-between text-[10px] font-bold text-secondary mb-1">
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-accent animate-ping" />
-            <span>Interactive Campus Route</span>
+      <div className="relative rounded-lg bg-[#F6F5F2] border border-[#E2DFD9] p-3 overflow-hidden">
+        <div className="flex items-center justify-between text-xs font-bold text-[#1B365D] mb-1.5">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[#7A1C24] animate-ping" />
+            <span>SLRTCE Indoor Navigation Route</span>
           </span>
-          <span>Level {location.floor}</span>
+          <span className="text-[#52525B] font-semibold">{location.floor}</span>
         </div>
 
-        <svg viewBox="0 0 300 180" className="w-full h-28 select-none" role="img" aria-label="Campus floor plan route">
+        <svg viewBox="0 0 420 180" className="w-full h-36 select-none" role="img" aria-label="Campus floor plan route">
           <title>Campus Floor Plan Route Map</title>
-          {/* Architectural Floor Grid Background */}
           <defs>
             <pattern id="floorGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-line/60" />
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-[#E2DFD9]" />
             </pattern>
           </defs>
-          <rect width="300" height="180" fill="url(#floorGrid)" rx="6" />
+          <rect width="420" height="180" fill="url(#floorGrid)" rx="6" />
 
-          {/* Building corridors */}
-          <rect x="20" y="130" width="120" height="35" rx="4" fill="currentColor" className="text-surface border" stroke="currentColor" strokeWidth="1" />
-          <rect x="110" y="30" width="35" height="110" rx="4" fill="currentColor" className="text-surface" stroke="currentColor" strokeWidth="1" />
-          <rect x="110" y="30" width="160" height="35" rx="4" fill="currentColor" className="text-surface" stroke="currentColor" strokeWidth="1" />
+          {/* Architectural corridors with high-contrast surfaces */}
+          <rect x="25" y="125" width="160" height="42" rx="4" fill="#FFFFFF" stroke="#CDC9C0" strokeWidth="1.5" />
+          <rect x="145" y="25" width="46" height="110" rx="4" fill="#FFFFFF" stroke="#CDC9C0" strokeWidth="1.5" />
+          <rect x="145" y="25" width="240" height="42" rx="4" fill="#FFFFFF" stroke="#CDC9C0" strokeWidth="1.5" />
 
-          {/* Corridor labels */}
-          <text x="35" y="152" fontSize="9" fontWeight="bold" fill="currentColor" className="text-secondary/70">Main Lobby</text>
-          <text x="115" y="90" fontSize="8" fontWeight="bold" fill="currentColor" className="text-secondary/70" transform="rotate(-90 120 90)">West Corridor</text>
-          <text x="170" y="52" fontSize="9" fontWeight="bold" fill="currentColor" className="text-secondary/70">Faculty Wing</text>
+          {/* High-visibility architectural zone labels (12px - 13px) */}
+          <text x="35" y="150" fontSize="13" fontWeight="bold" fill="#52525B">Main Lobby</text>
+          <text x="150" y="85" fontSize="12" fontWeight="bold" fill="#52525B" transform="rotate(-90 156 85)">West Corridor</text>
+          <text x="215" y="50" fontSize="13" fontWeight="bold" fill="#52525B">Faculty Wing Block C</text>
 
-          {/* Walking Path with Animated Dash */}
+          {/* Dynamic Walking Path */}
           <path
-            d={`M ${coords.start[0]} ${coords.start[1]} L ${coords.elevator[0]} ${coords.start[1]} L ${coords.elevator[0]} ${coords.elevator[1]} L ${coords.destination[0]} ${coords.destination[1]}`}
+            d="M 50 146 L 168 146 L 168 46 L 330 46"
             fill="none"
-            stroke="var(--accent)"
-            strokeWidth="3"
-            strokeDasharray="6 4"
+            stroke="#7A1C24"
+            strokeWidth="3.5"
+            strokeDasharray="8 5"
             className="motion-safe:animate-[dash_1s_linear_infinite]"
           />
 
-          {/* Kiosk / Start Node */}
-          <circle cx={coords.start[0]} cy={coords.start[1]} r="6" fill="#15803D" />
-          <circle cx={coords.start[0]} cy={coords.start[1]} r="10" fill="#15803D" opacity="0.25" className="animate-ping" />
-          <text x={coords.start[0] - 10} y={coords.start[1] + 16} fontSize="8" fontWeight="bold" fill="#15803D">You</text>
+          {/* You (Kiosk Start Node) */}
+          <circle cx="50" cy="146" r="7" fill="#15803D" />
+          <circle cx="50" cy="146" r="13" fill="#15803D" opacity="0.25" className="animate-ping" />
+          <text x="35" y="132" fontSize="12" fontWeight="bold" fill="#15803D">You (Kiosk)</text>
 
-          {/* Elevator / Midpoint Node */}
-          <rect x={coords.elevator[0] - 7} y={coords.elevator[1] - 7} width="14" height="14" rx="2" fill="currentColor" className="text-surface-muted" stroke="currentColor" strokeWidth="1.5" />
-          <text x={coords.elevator[0] - 5} y={coords.elevator[1] + 3} fontSize="7" fontWeight="bold" fill="currentColor" className="text-secondary">EL</text>
+          {/* Elevator Midpoint Node */}
+          <rect x="158" y="88" width="20" height="20" rx="3" fill="#1B365D" />
+          <text x="162" y="103" fontSize="11" fontWeight="bold" fill="#FFFFFF">EL2</text>
+          <text x="183" y="102" fontSize="11" fontWeight="bold" fill="#1B365D">Elevator 2</text>
 
           {/* Destination Node */}
-          <circle cx={coords.destination[0]} cy={coords.destination[1]} r="7" fill="var(--accent)" />
-          <circle cx={coords.destination[0]} cy={coords.destination[1]} r="12" fill="var(--accent)" opacity="0.2" className="animate-pulse" />
-          <text x={coords.destination[0] - 25} y={coords.destination[1] - 10} fontSize="8" fontWeight="extrabold" fill="var(--accent)">
-            {location.room.split(" ")[0]}
+          <circle cx="330" cy="46" r="8" fill="#7A1C24" />
+          <circle cx="330" cy="46" r="15" fill="#7A1C24" opacity="0.25" className="animate-pulse" />
+          <rect x="280" y="15" width="100" height="20" rx="4" fill="#7A1C24" />
+          <text x="288" y="29" fontSize="11" fontWeight="bold" fill="#FFFFFF">
+            {location.room}
           </text>
         </svg>
       </div>
