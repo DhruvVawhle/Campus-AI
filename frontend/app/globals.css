@@ -1,0 +1,158 @@
+/* hallmark: theme: terracotta-mono genre: modern-minimal signature: live-3d-robot-and-audio-simulator */
+/* critique: tactile edge-ai kiosk reception portal, tokenized system, zero slop */
+@import "tailwindcss";
+
+:root {
+  --ground: #F4F5F7;
+  --ink: #0F1216;
+  --secondary: #4A5260;
+  --line: #D8DCE3;
+  --line-strong: #B4BCC8;
+  --surface: #FFFFFF;
+  --surface-muted: #ECEEF2;
+  --surface-dark: #0D1015;
+  --surface-dark-card: #151921;
+  --surface-dark-line: #242A36;
+  --ink-dark: #F0F3F7;
+  --secondary-dark: #8E98A8;
+  --accent: #B3401E;
+  --accent-hover: #983416;
+  --accent-surface: #FDF1ED;
+  --accent-surface-dark: #2A1713;
+  --accent-foreground: #FFFFFF;
+  --chip-border: #C5CAD3;
+  --success: #15803D;
+  --success-surface: #ECFDF3;
+  --warning: #D97706;
+  --warning-surface: #FEF3C7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #0D1015;
+    --ink: #F0F3F7;
+    --secondary: #8E98A8;
+    --line: #242A36;
+    --line-strong: #374052;
+    --surface: #151921;
+    --surface-muted: #1C212B;
+    --surface-dark: #080A0E;
+    --surface-dark-card: #0F131A;
+    --surface-dark-line: #1D2330;
+    --ink-dark: #F0F3F7;
+    --secondary-dark: #8E98A8;
+    --accent: #E0693F;
+    --accent-hover: #F07E55;
+    --accent-surface: #2A1713;
+    --accent-surface-dark: #1E1210;
+    --accent-foreground: #0D1015;
+    --chip-border: #2D3545;
+    --success: #34D399;
+    --success-surface: #064E3B;
+    --warning: #FBBF24;
+    --warning-surface: #78350F;
+  }
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-ink: var(--ink);
+  --color-secondary: var(--secondary);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-dark-card: var(--surface-dark-card);
+  --color-surface-dark-line: var(--surface-dark-line);
+  --color-ink-dark: var(--ink-dark);
+  --color-secondary-dark: var(--secondary-dark);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-surface: var(--accent-surface);
+  --color-accent-surface-dark: var(--accent-surface-dark);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-chip-border: var(--chip-border);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  
+  --font-sans: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  
+  --color-destructive: #B91C1C;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    font-size: clamp(14px, 1.05vw, 18px);
+    overflow-x: clip;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    min-height: 100dvh;
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  * {
+    border-color: var(--line);
+  }
+
+  button,
+  [role="button"],
+  a,
+  input,
+  select,
+  textarea {
+    outline: none;
+  }
+
+  :where(button, [role="button"], a, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .scroll-slim {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .scroll-slim::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scroll-slim::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 999px;
+  }
+
+  .interactive-tap:active {
+    transform: translateY(1px) scale(0.99);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .interactive-tap:active {
+      transform: none;
+    }
+  }
+
+  .subtle-lift {
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+  .subtle-lift:hover {
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .subtle-lift, .subtle-lift:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+}
