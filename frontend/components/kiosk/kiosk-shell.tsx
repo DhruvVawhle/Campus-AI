@@ -471,7 +471,7 @@ export function KioskShell() {
   const hasActiveConversation = Boolean(conversation.transcript || conversation.reply);
 
   const speakButtonLabel = micPermitted === false
-    ? "Enable Microphone"
+    ? t.enableMic || "Enable Mic"
     : isListening
     ? t.listening
     : isThinking
@@ -488,7 +488,7 @@ export function KioskShell() {
       {/* 1. Top Institutional Header (h-16, border-b border-[#E2DFD9], border-t-4 border-t-[#7A1C24]) */}
       <header className="h-16 px-4 lg:px-6 bg-[#FFFFFF] border-b border-[#E2DFD9] border-t-4 border-t-[#7A1C24] flex items-center justify-between shrink-0 shadow-2xs">
         
-        {/* Left: SLRTCE • CampusAI Reception Desk + Time Badge */}
+        {/* Left: CampusAI logo + SLRTCE Campus institutional pill */}
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -496,16 +496,17 @@ export function KioskShell() {
             onPointerDown={handleLogoPointerDown}
             onPointerUp={handleLogoPointerUp}
             onPointerLeave={handleLogoPointerUp}
-            className="text-xl font-black tracking-tight text-[#7A1C24] hover:opacity-95 focus-visible:outline-2 focus-visible:outline-[#7A1C24] rounded-md px-1 cursor-pointer"
-            title="SLRTCE Reception Terminal (Tap 5x for hardware diagnostics)"
-            aria-label="SLRTCE Home"
+            className="flex items-center gap-2 text-xl font-black tracking-tight text-[#7A1C24] hover:opacity-95 focus-visible:outline-2 focus-visible:outline-[#7A1C24] rounded-md px-1 cursor-pointer"
+            title="CampusAI (Tap 5x for hardware diagnostics)"
+            aria-label="CampusAI Home"
           >
-            SLRTCE
+            <span className="w-2.5 h-2.5 rounded-full bg-[#7A1C24]" aria-hidden="true" />
+            <span>CampusAI</span>
           </button>
 
           <span className="text-[#E2DFD9] font-light text-lg">|</span>
 
-          <span className="text-sm font-bold text-[#1B365D] hidden sm:inline-block">
+          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#F6F5F2] border border-[#E2DFD9] text-[#1B365D]">
             {t.stationSubtitle}
           </span>
 
@@ -519,17 +520,22 @@ export function KioskShell() {
         {/* Right: Hardware & System Status Cluster */}
         <div className="flex items-center gap-2">
           
-          {/* Honest Microphone Permission Control */}
-          {micPermitted === false && (
+          {/* Honest Microphone Status Pill */}
+          {micPermitted === false ? (
             <button
               type="button"
               onClick={requestMicPermission}
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FEE2E2] text-[#B91C1C] border border-[#FECACA] text-xs font-bold hover:bg-[#FECACA] motion-safe:transition-colors cursor-pointer"
-              title="Microphone access is blocked by your browser. Click to prompt permission."
+              title="Microphone access is blocked by browser. Click to prompt permission."
             >
               <FiMic className="w-3.5 h-3.5" />
-              <span>Enable Microphone</span>
+              <span>Mic Blocked</span>
             </button>
+          ) : (
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#DCFCE7] text-[#15803D] border border-[#BBF7D0] text-xs font-semibold">
+              <FiMic className="w-3.5 h-3.5" />
+              <span>Mic Ready</span>
+            </div>
           )}
 
           {/* Voice Output Speaker Toggle */}
@@ -541,7 +547,7 @@ export function KioskShell() {
               playKioskSound("tap");
             }}
             className="min-h-[36px] flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#FFFFFF] border border-[#E2DFD9] hover:bg-[#F6F5F2] text-xs font-semibold text-[#18181B] motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-[#7A1C24]"
-            aria-label={soundEnabled ? "Voice output enabled. Click to mute." : "Voice output muted. Click to enable."}
+            aria-label={soundEnabled ? "Audio output enabled. Click to mute." : "Audio output muted. Click to enable."}
           >
             {soundEnabled ? (
               <FiVolume2 className="w-3.5 h-3.5 text-[#7A1C24] shrink-0" aria-hidden="true" />
@@ -571,7 +577,7 @@ export function KioskShell() {
         <aside className="lg:col-span-4 bg-[#FFFFFF] border border-[#E2DFD9] rounded-lg p-3.5 flex flex-col justify-between min-h-0 h-full shadow-2xs">
           
           <div>
-            <div className="flex items-center justify-between pb-1 border-b border-[#E2DFD9]">
+            <div className="flex items-center justify-between pb-1.5 border-b border-[#E2DFD9]">
               <h1 className="text-sm font-bold text-[#1B365D]">
                 {t.directoryHeading}
               </h1>
@@ -579,12 +585,9 @@ export function KioskShell() {
                 SLRTCE Campus
               </span>
             </div>
-            <p className="text-xs text-[#52525B] mt-1 font-medium">
-              {t.directorySubtitle}
-            </p>
 
             {/* Filter Tabs: Single horizontal row with zero awkward line breaks */}
-            <div className="flex items-center gap-1 mt-2.5 pb-2 border-b border-[#E2DFD9] overflow-x-auto scroll-slim flex-nowrap">
+            <div className="flex items-center gap-1 mt-2 pb-2 border-b border-[#E2DFD9] overflow-x-auto scroll-slim flex-nowrap">
               {SLRTCE_CATEGORIES.map((cat) => {
                 const label =
                   lang === "hi"
@@ -618,8 +621,8 @@ export function KioskShell() {
             </div>
           </div>
 
-          {/* Directory Items with Structured Metadata Badges */}
-          <nav className="flex-1 overflow-y-auto space-y-1.5 scroll-slim my-2 pr-1" aria-label="SLRTCE Directory Inquiries">
+          {/* Directory Items with 2 Compact Lines (Fit all 5 cleanly without inner scroll) */}
+          <nav className="flex-1 space-y-1.5 my-2 pr-1" aria-label="SLRTCE Directory Inquiries">
             {filteredDirectory.map((item) => {
               const isBusy = conversation.busy || voice.recording;
               return (
@@ -628,30 +631,22 @@ export function KioskShell() {
                   type="button"
                   onClick={() => !isBusy && executeQuery(item.prompt)}
                   disabled={isBusy}
-                  className="w-full p-2.5 rounded-lg border border-[#E2DFD9] bg-[#FFFFFF] hover:bg-[#F6F5F2] hover:border-[#CDC9C0] text-left motion-safe:transition-colors flex items-start gap-2.5 focus-visible:outline-2 focus-visible:outline-[#7A1C24] disabled:opacity-50 cursor-pointer"
+                  className="w-full px-2.5 py-2 rounded-lg border border-[#E2DFD9] bg-[#FFFFFF] hover:bg-[#F6F5F2] hover:border-[#CDC9C0] text-left motion-safe:transition-colors flex flex-col justify-center focus-visible:outline-2 focus-visible:outline-[#7A1C24] disabled:opacity-50 cursor-pointer"
                 >
-                  <span className="w-7 h-7 rounded-md bg-[#7A1C24]/10 text-[#7A1C24] flex items-center justify-center shrink-0 mt-0.5">
-                    <FiMapPin className="w-3.5 h-3.5" aria-hidden="true" />
-                  </span>
+                  {/* Line 1: Title + Floor Badge */}
+                  <div className="flex items-center justify-between gap-1 w-full">
+                    <span className="text-xs font-bold text-[#18181B] truncate">{item.title}</span>
+                    <span className="text-[10px] font-semibold text-[#D99B26] bg-[#FEF3C7] px-1.5 py-0.5 rounded shrink-0">
+                      {item.floorBadge}
+                    </span>
+                  </div>
                   
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-1">
-                      <span className="text-xs font-bold text-[#18181B] truncate">{item.title}</span>
-                      <span className="text-[10px] font-semibold text-[#D99B26] bg-[#FEF3C7] px-1.5 py-0.5 rounded shrink-0">
-                        {item.floorBadge}
-                      </span>
-                    </div>
-                    
-                    <div className="text-[11px] text-[#52525B] mt-0.5 truncate">{item.subtitle}</div>
-                    
-                    <div className="flex items-center gap-1.5 mt-1.5">
-                      <span className="text-[10px] font-semibold text-[#1B365D] bg-[#F6F5F2] border border-[#E2DFD9] px-1.5 py-0.2 rounded">
-                        {item.deptBadge}
-                      </span>
-                      <span className="text-[10px] font-medium text-[#52525B]">
-                        {item.roomBadge}
-                      </span>
-                    </div>
+                  {/* Line 2: Role/Details + Room Tag */}
+                  <div className="flex items-center justify-between gap-1 text-[11px] text-[#52525B] mt-1 w-full">
+                    <span className="truncate">{item.subtitle}</span>
+                    <span className="text-[10px] font-medium text-[#1B365D] bg-[#F6F5F2] px-1.5 py-0.5 rounded border border-[#E2DFD9] shrink-0">
+                      {item.roomBadge}
+                    </span>
                   </div>
                 </button>
               );
@@ -717,7 +712,7 @@ export function KioskShell() {
               
               <div>
                 <span className="text-sm font-bold text-[#1B365D] block leading-tight">{t.liveAssistant}</span>
-                <span className="text-[11px] text-[#52525B] font-medium">SLRTCE Reception Terminal</span>
+                <span className="text-[11px] text-[#52525B] font-medium">SLRTCE Campus Terminal</span>
               </div>
             </div>
 
@@ -744,7 +739,7 @@ export function KioskShell() {
             {!hasActiveConversation ? (
               
               /* Hero Welcome State: Clean Horizontal Robot Card + 3 Touch Action Cards */
-              <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto py-2">
+              <div className="flex flex-col justify-center gap-6 h-full max-w-2xl mx-auto py-2">
                 
                 {/* Horizontal Centered Robot & Welcome Card */}
                 <div className="w-full p-4 rounded-lg bg-[#F6F5F2] border border-[#E2DFD9] flex flex-col sm:flex-row items-center gap-4">
@@ -760,8 +755,8 @@ export function KioskShell() {
                     }}
                     tabIndex={0}
                     role="button"
-                    aria-label="SLRTCE Reception Robot. Tap to interact."
-                    className="relative w-[110px] h-[110px] sm:w-[125px] sm:h-[125px] flex items-center justify-center shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#7A1C24] rounded-full"
+                    aria-label="CampusAI Robot. Tap to interact."
+                    className="relative w-[110px] h-[110px] sm:w-[125px] sm:h-[125px] flex items-center justify-center shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#7A1C24] rounded-full mix-blend-multiply"
                     title="Tap robot to interact"
                   >
                     {/* Crest Gold audio pulse ring */}
@@ -783,7 +778,7 @@ export function KioskShell() {
                   {/* SLRTCE Maroon Welcome Bubble */}
                   <div className="flex-1 min-w-0 p-3.5 rounded-lg bg-[#7A1C24] text-[#FFFFFF] shadow-xs">
                     <div className="text-[11px] font-bold uppercase tracking-wider text-[#D99B26] mb-1">
-                      SLRTCE Campus Reception
+                      CAMPUSAI • SLRTCE
                     </div>
                     <p className="text-xs sm:text-sm font-semibold leading-relaxed">
                       {t.welcomeGreeting}
@@ -880,7 +875,7 @@ export function KioskShell() {
                     <div className="flex items-center justify-between border-b border-[#E2DFD9] pb-1.5">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-[#7A1C24]" />
-                        <span className="text-xs font-bold text-[#7A1C24]">SLRTCE Assistant</span>
+                        <span className="text-xs font-bold text-[#7A1C24]">CampusAI</span>
                       </div>
                       <span className="text-[11px] text-[#52525B] font-semibold">Mira Road (E)</span>
                     </div>
@@ -967,7 +962,7 @@ export function KioskShell() {
                       </div>
                     )}
 
-                    {/* Human Reception Desk Escalation Bell */}
+                    {/* Human Staff Desk Escalation Bell */}
                     <div className="pt-2 border-t border-[#E2DFD9] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       {deskBellNotified ? (
                         <div className="flex items-center gap-1.5 text-xs font-semibold text-[#15803D] bg-[#DCFCE7] px-2.5 py-1 rounded-md border border-[#BBF7D0]">
@@ -1002,10 +997,11 @@ export function KioskShell() {
               <button
                 type="button"
                 onClick={requestMicPermission}
+                title="Click to allow microphone access in your browser"
                 className="w-full sm:w-[200px] md:w-[220px] h-11 px-3.5 rounded-md bg-[#B91C1C] text-[#FFFFFF] font-bold flex items-center justify-center gap-2 hover:bg-[#991B1B] motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-[#B91C1C] shrink-0 cursor-pointer shadow-2xs text-xs sm:text-sm"
               >
                 <FiMic className="w-4 h-4 shrink-0" aria-hidden="true" />
-                <span>Enable Microphone</span>
+                <span>{t.enableMic || "Enable Mic"}</span>
               </button>
             ) : (
               <button

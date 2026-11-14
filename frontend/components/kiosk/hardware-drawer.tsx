@@ -508,7 +508,7 @@ export function HardwareDrawer({ open, onClose }: HardwareDrawerProps) {
 
         {/* Drawer Footer */}
         <div className="p-4 border-t border-line bg-surface flex items-center justify-between text-xs text-secondary">
-          <span>CampusAI Reception Kiosk</span>
+          <span>CampusAI Kiosk</span>
           <button
             type="button"
             onClick={onClose}
