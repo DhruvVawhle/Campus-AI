@@ -1,58 +1,92 @@
-/* hallmark: theme: swiss-station genre: modern-minimal signature: live-3d-robot-and-audio-simulator */
-/* critique: bespoke physical-digital campus kiosk, single-source navigation, zero card-in-card nesting, authentic institutional palette */
+/* hallmark: theme: slrtce-terminal genre: modern-minimal signature: live-3d-robot-and-audio-simulator */
+/* critique: authentic institutional terminal for Shree L. R. Tiwari College of Engineering (SLRTCE), Mira Road */
 @import "tailwindcss";
 
 :root {
-  --ground: #F3F4F6;
-  --ink: #111827;
-  --secondary: #4B5563;
-  --line: #E5E7EB;
-  --line-strong: #D1D5DB;
+  --ground: #F6F5F2;
+  --ink: #18181B;
+  --secondary: #52525B;
+  --line: #E2DFD9;
+  --line-strong: #CDC9C0;
   --surface: #FFFFFF;
-  --surface-muted: #F9FAFB;
-  --surface-dark: #0A0D12;
-  --surface-dark-card: #111620;
-  --surface-dark-line: #1F2736;
-  --ink-dark: #F3F4F6;
-  --secondary-dark: #9CA3AF;
-  --accent: #1D4ED8;
-  --accent-hover: #1E40AF;
-  --accent-surface: #EFF6FF;
-  --accent-surface-dark: #172554;
+  --surface-muted: #F0EDE8;
+  --surface-dark: #12100E;
+  --surface-dark-card: #1C1917;
+  --surface-dark-line: #2E2A25;
+  --ink-dark: #F6F5F2;
+  --secondary-dark: #A1A1AA;
+
+  /* SLRTCE Institutional Palette */
+  --slrtce-maroon: #7A1C24;
+  --slrtce-maroon-hover: #5C1319;
+  --slrtce-navy: #1B365D;
+  --slrtce-gold: #D99B26;
+
+  --accent: #7A1C24;
+  --accent-hover: #5C1319;
+  --accent-surface: #FDF2F3;
+  --accent-surface-dark: #2A0E11;
   --accent-foreground: #FFFFFF;
-  --chip-border: #D1D5DB;
+  --chip-border: #E2DFD9;
+
+  /* Functional Status Tokens */
+  --status-local-ink: #15803D;
+  --status-local-bg: #DCFCE7;
+  --status-afterhours-ink: #B45309;
+  --status-afterhours-bg: #FEF3C7;
+  --status-warning-ink: #B91C1C;
+  --status-warning-bg: #FEE2E2;
+
   --success: #15803D;
-  --success-surface: #ECFDF3;
-  --warning: #D97706;
+  --success-surface: #DCFCE7;
+  --warning: #B45309;
   --warning-surface: #FEF3C7;
-  --warning-ink: #92400E;
+  --warning-ink: #78350F;
+  --destructive: #B91C1C;
+  --destructive-surface: #FEE2E2;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ground: #0A0D12;
-    --ink: #F3F4F6;
-    --secondary: #9CA3AF;
-    --line: #1F2736;
-    --line-strong: #374151;
-    --surface: #111620;
-    --surface-muted: #161D2A;
-    --surface-dark: #07090D;
-    --surface-dark-card: #0D121A;
-    --surface-dark-line: #1A212E;
-    --ink-dark: #F3F4F6;
-    --secondary-dark: #9CA3AF;
-    --accent: #3B82F6;
-    --accent-hover: #60A5FA;
-    --accent-surface: #172554;
-    --accent-surface-dark: #0F172A;
+    --ground: #141210;
+    --ink: #F4F4F5;
+    --secondary: #A1A1AA;
+    --line: #2E2924;
+    --line-strong: #443D36;
+    --surface: #1C1917;
+    --surface-muted: #24201C;
+    --surface-dark: #0C0A09;
+    --surface-dark-card: #171412;
+    --surface-dark-line: #2A241F;
+    --ink-dark: #F4F4F5;
+    --secondary-dark: #71717A;
+
+    --slrtce-maroon: #9E2B35;
+    --slrtce-maroon-hover: #B73642;
+    --slrtce-navy: #3B82F6;
+    --slrtce-gold: #EAB308;
+
+    --accent: #9E2B35;
+    --accent-hover: #B73642;
+    --accent-surface: #2D1013;
+    --accent-surface-dark: #1F0B0D;
     --accent-foreground: #FFFFFF;
-    --chip-border: #374151;
-    --success: #34D399;
-    --success-surface: #064E3B;
+    --chip-border: #38312A;
+
+    --status-local-ink: #4ADE80;
+    --status-local-bg: #052E16;
+    --status-afterhours-ink: #FBBF24;
+    --status-afterhours-bg: #451A03;
+    --status-warning-ink: #F87171;
+    --status-warning-bg: #450A0A;
+
+    --success: #4ADE80;
+    --success-surface: #052E16;
     --warning: #FBBF24;
-    --warning-surface: #78350F;
-    --warning-ink: #FDE68A;
+    --warning-surface: #451A03;
+    --warning-ink: #FEF3C7;
+    --destructive: #F87171;
+    --destructive-surface: #450A0A;
   }
 }
 
@@ -63,6 +97,17 @@
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-surface: var(--surface);
+  --color-slrtce-maroon: var(--slrtce-maroon);
+  --color-slrtce-maroon-hover: var(--slrtce-maroon-hover);
+  --color-slrtce-navy: var(--slrtce-navy);
+  --color-slrtce-gold: var(--slrtce-gold);
+  --color-status-local-ink: var(--status-local-ink);
+  --color-status-local-bg: var(--status-local-bg);
+  --color-status-afterhours-ink: var(--status-afterhours-ink);
+  --color-status-afterhours-bg: var(--status-afterhours-bg);
+  --color-status-warning-ink: var(--status-warning-ink);
+  --color-status-warning-bg: var(--status-warning-bg);
+
   --color-surface-muted: var(--surface-muted);
   --color-surface-dark: var(--surface-dark);
   --color-surface-dark-card: var(--surface-dark-card);

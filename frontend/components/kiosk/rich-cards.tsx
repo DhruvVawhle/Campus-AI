@@ -13,8 +13,23 @@ import {
 } from "react-icons/fi";
 import type { GroundedCampusRecord } from "@/lib/kiosk/campus-knowledge";
 
+interface WayfindingLocation {
+  room: string;
+  floor: string;
+  wing?: string;
+  block?: string;
+  landmark?: string;
+  walkTime: string;
+  waypointSteps?: string[];
+  mapCoordinates?: {
+    start: [number, number];
+    elevator: [number, number];
+    destination: [number, number];
+  };
+}
+
 interface WayfindingCardProps {
-  location: NonNullable<GroundedCampusRecord["locationDetails"]>;
+  location: WayfindingLocation;
   title?: string;
   qrUri?: string;
   onOpenDrawer?: () => void;
@@ -38,25 +53,33 @@ export function WayfindingCard({ location, title, qrUri, onOpenDrawer }: Wayfind
     }
   };
 
+  const subtitleLocation = [location.floor, location.block || location.wing].filter(Boolean).join(", ");
+
   return (
-    <div className="mt-2.5 rounded-xl bg-surface border border-line p-3 text-ink shadow-xs space-y-2.5">
+    <div className="mt-2.5 rounded-lg bg-surface border border-line p-3 text-ink shadow-2xs space-y-2.5">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-line pb-2">
         <div className="flex items-center gap-1.5 min-w-0">
-          <span className="w-6 h-6 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
-            <FiMapPin className="w-3.5 h-3.5 text-accent" />
+          <span className="w-6 h-6 rounded-md bg-[#7A1C24]/10 text-[#7A1C24] flex items-center justify-center shrink-0">
+            <FiMapPin className="w-3.5 h-3.5" />
           </span>
           <div className="min-w-0">
             <div className="text-xs font-extrabold text-ink truncate">{location.room}</div>
             <div className="text-[11px] font-medium text-secondary truncate">
-              {location.floor}, {location.wing}
+              {subtitleLocation}
             </div>
           </div>
         </div>
-        <span className="text-[11px] font-bold text-accent bg-accent/10 px-2 py-0.5 rounded-md shrink-0">
+        <span className="text-[11px] font-bold text-[#7A1C24] bg-[#7A1C24]/10 px-2 py-0.5 rounded-md shrink-0">
           {location.walkTime}
         </span>
       </div>
+
+      {location.landmark && (
+        <div className="text-[11px] font-semibold text-[#1B365D] bg-[#F6F5F2] px-2.5 py-1 rounded-md border border-line">
+          📍 Landmark: {location.landmark}
+        </div>
+      )}
 
       {/* Interactive SVG Floor Plan Mini-Map */}
       <div className="relative rounded-lg bg-ground border border-line p-2 overflow-hidden">
