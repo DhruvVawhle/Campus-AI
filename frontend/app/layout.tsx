@@ -10,9 +10,9 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "CampusAI — Autonomous Multilingual College Reception Robot",
+  title: "CampusAI — SLRTCE Campus Terminal",
   description:
-    "Zero-cost, voice-enabled college reception robot and interactive kiosk powered by Groq Whisper, Llama 3.3 70B, FAISS vector RAG, and SQLite. Spoken guidance in English, Hindi, and Marathi.",
+    "Zero-cost, voice-enabled interactive campus terminal powered by Groq Whisper, Llama 3.3 70B, FAISS vector RAG, and SQLite. Spoken guidance in English, Hindi, and Marathi.",
 };
 
 export const viewport: Viewport = {

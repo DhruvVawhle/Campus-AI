@@ -1,8 +1,8 @@
 import { KioskScreen } from "../../components/kiosk/kiosk-screen";
 
 export const metadata = {
-  title: "CampusAI — Kiosk",
-  description: "Talk to CampusAI, your AI college receptionist.",
+  title: "CampusAI — SLRTCE Campus Terminal",
+  description: "Interactive campus terminal for Shree L. R. Tiwari College of Engineering (SLRTCE).",
 };
 
 export default function KioskPage() {

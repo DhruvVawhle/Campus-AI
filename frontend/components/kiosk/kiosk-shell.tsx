@@ -764,20 +764,11 @@ export function KioskShell() {
                   </div>
                 </div>
 
-                {/* Microphone Blocked Warning Notice */}
+                {/* Microphone Blocked Informational Notice (No duplicate button - bottom dock CTA owns the action) */}
                 {micPermitted === false && (
-                  <div className="w-full my-2 p-3 rounded bg-destructive-surface border border-destructive/20 flex items-center justify-between gap-3 text-xs sm:text-sm font-medium text-destructive">
-                    <div className="flex items-center gap-2">
-                      <FiAlertTriangle className="w-4 h-4 shrink-0" />
-                      <span>Microphone access is blocked in your browser. Tap Enable Mic or select an inquiry below.</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={requestMicPermission}
-                      className="min-h-[36px] px-3 py-1.5 rounded bg-destructive text-white font-bold text-xs sm:text-sm hover:opacity-90 shrink-0 cursor-pointer"
-                    >
-                      Enable Mic
-                    </button>
+                  <div className="w-full my-2 px-3.5 py-2.5 rounded-lg bg-destructive-surface border border-destructive/20 flex items-center gap-2.5 text-xs sm:text-sm font-medium text-destructive">
+                    <FiAlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>Microphone access is blocked in your browser. Use the Enable Mic button below or select an inquiry.</span>
                   </div>
                 )}
 
