@@ -201,6 +201,10 @@ export function useConversation() {
     }
   }, []);
 
+  const setSpeaking = useCallback((speaking: boolean) => {
+    setState(speaking ? "speaking" : "idle");
+  }, []);
+
   const setThinking = useCallback(() => setState("thinking"), []);
 
   const clearSpeechNotice = useCallback(() => setSpeechNotice(""), []);
@@ -235,9 +239,11 @@ export function useConversation() {
     error,
     origin,
     reply,
+    setReply,
     replyLanguage,
     reset,
     setListening,
+    setSpeaking,
     setThinking,
     setSpeechNotice,
     sessionId,
