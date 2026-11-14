@@ -113,11 +113,11 @@ export const SLRTCE_DIRECTORY: SLRTCEDirectoryTopic[] = [
     id: "facil-library",
     category: "facilities",
     title: "Central Library & Reading Hall",
-    subtitle: "Open 8 AM – 9 PM, Main Block",
+    subtitle: "College Hours 9 AM – 5 PM • Main Block",
     deptBadge: "Central Library",
     roomBadge: "Main Reading Hall",
     floorBadge: "2nd Floor",
-    prompt: "When does the central library and reading hall open?",
+    prompt: "What are the timings and location of the Central Library?",
   },
 ];
 
@@ -138,10 +138,10 @@ export const SLRTCE_QUICK_PROMPTS = [
   },
   {
     category: "Campus Timings",
-    label: "Today's Campus Hours",
-    prompt: "When does the central library and reading hall open?",
+    label: "College Working Hours",
+    prompt: "What are the official college timings at SLRTCE?",
     icon: FiInfo,
-    subtitle: "Reading hall, administrative desks & exam cell timings",
+    subtitle: "Working hours 9:00 AM – 5:00 PM for classes & offices",
   },
 ];
 
@@ -174,8 +174,8 @@ export const SLRTCE_LOCALIZATION = {
     humanDeskSent: "Staff desk at Counter 1 has been paged.",
     footerLeft: "CampusAI — Shree L. R. Tiwari College of Engineering",
     footerRight: "Local On-Device Processing",
-    afterHoursBadge: "Library Open till 9 PM",
-    openHoursBadge: "Offices Open 9 AM – 5 PM",
+    afterHoursBadge: "College Closed • Hours: 9 AM – 5 PM",
+    openHoursBadge: "College Open • 9 AM – 5 PM",
   },
   hi: {
     stationTitle: "CampusAI",
@@ -205,8 +205,8 @@ export const SLRTCE_LOCALIZATION = {
     humanDeskSent: "काउंटर 1 पर स्टाफ को सूचना भेज दी गई है।",
     footerLeft: "CampusAI — श्री एल. आर. तिवारी कॉलेज ऑफ इंजीनियरिंग",
     footerRight: "लोकल ऑन-डिवाइस प्रोसेसिंग",
-    afterHoursBadge: "लाइब्रेरी रात 9 बजे तक खुली है",
-    openHoursBadge: "कार्यालय 9 AM – 5 PM",
+    afterHoursBadge: "कॉलेज बंद • समय: 9 AM – 5 PM",
+    openHoursBadge: "कॉलेज खुला है • 9 AM – 5 PM",
   },
   mr: {
     stationTitle: "CampusAI",
@@ -236,8 +236,8 @@ export const SLRTCE_LOCALIZATION = {
     humanDeskSent: "काउंटर 1 वरील कर्मचाऱ्यांना माहिती पाठवण्यात आली आहे.",
     footerLeft: "CampusAI — श्री एल. आर. तिवारी कॉलेज ऑफ इंजिनिअरिंग",
     footerRight: "स्थानिक ऑन-डिव्हाइस प्रक्रिया",
-    afterHoursBadge: "ग्रंथालय रात्री 9 पर्यंत सुरू",
-    openHoursBadge: "कार्यालये 9 AM – 5 PM",
+    afterHoursBadge: "कॉलेज बंद • वेळ: 9 AM – 5 PM",
+    openHoursBadge: "कॉलेज सुरू आहे • 9 AM – 5 PM",
   },
   hinglish: {
     stationTitle: "CampusAI",
@@ -267,8 +267,8 @@ export const SLRTCE_LOCALIZATION = {
     humanDeskSent: "Counter 1 staff ko inform kar diya gaya hai.",
     footerLeft: "CampusAI — Shree L. R. Tiwari College of Engineering",
     footerRight: "Local On-Device Processing",
-    afterHoursBadge: "Library Open till 9 PM",
-    openHoursBadge: "Offices Open 9 AM – 5 PM",
+    afterHoursBadge: "College Closed • Hours: 9 AM – 5 PM",
+    openHoursBadge: "College Open • 9 AM – 5 PM",
   },
 };
 
@@ -410,13 +410,13 @@ export const SLRTCE_KNOWLEDGE_BASE: SLRTCEKnowledgeRecord[] = [
     ],
   },
   {
-    queryMatch: /library|reading\s*hall|books?|open|hours?|catalog/i,
+    queryMatch: /library|reading\s*hall|books?|catalog/i,
     category: "facilities",
     title: "Central Library & Digital Reading Hall (Main Block, 2nd Floor)",
-    replyEn: "The SLRTCE Central Library and Air-Conditioned Reading Hall is on the 2nd Floor of Main Block. The Reading Hall is open from 8:00 AM to 9:00 PM on all instructional days. High-speed Wi-Fi and IEEE digital repositories are accessible to registered students.",
-    replyHi: "SLRTCE केंद्रीय पुस्तकालय और वातानुकूलित रीडिंग हॉल मुख्य ब्लॉक की दूसरी मंजिल पर है। यह सुबह 8:00 से रात 9:00 बजे तक खुला रहता है। छात्रों के लिए IEEE ई-रिसोर्स उपलब्ध हैं।",
-    replyMr: "SLRTCE चे मध्यवर्ती ग्रंथालय आणि वातानुकूलित वाचन कक्ष मुख्य ब्लॉकच्या दुसऱ्या मजल्यावर आहे. हे सकाळी 8:00 ते रात्री 9:00 पर्यंत खुले असते. विद्यार्थ्यांना वाय-फाय व IEEE डिजिटल लायब्ररी उपलब्ध आहे.",
-    replyHinglish: "SLRTCE Central Library & AC Reading Hall Main Block 2nd floor par hai. Daily timings 8:00 AM se 9:00 PM tak hain. IEEE papers and high-speed Wi-Fi available hain.",
+    replyEn: "The SLRTCE Central Library and Digital Reading Hall is located on the 2nd Floor of Main Block. In accordance with official college hours, it is open from 9:00 AM to 5:00 PM on all instructional days. High-speed Wi-Fi and IEEE digital repositories are accessible to registered students.",
+    replyHi: "SLRTCE केंद्रीय पुस्तकालय और डिजिटल रीडिंग हॉल मुख्य ब्लॉक की दूसरी मंजिल पर स्थित है। कॉलेज समय के अनुसार, यह सभी शैक्षणिक दिनों में सुबह 9:00 से शाम 5:00 बजे तक खुला रहता है। छात्रों के लिए IEEE ई-रिसोर्स उपलब्ध हैं।",
+    replyMr: "SLRTCE चे मध्यवर्ती ग्रंथालय आणि डिजिटल वाचन कक्ष मुख्य ब्लॉकच्या दुसऱ्या मजल्यावर आहे. अधिकृत कॉलेज वेळेनुसार, हे कामकाजाच्या दिवशी सकाळी 9:00 ते संध्याकाळी 5:00 पर्यंत खुले असते. विद्यार्थ्यांना वाय-फाय व IEEE डिजिटल लायब्ररी उपलब्ध आहे.",
+    replyHinglish: "SLRTCE Central Library & Digital Reading Hall Main Block 2nd floor par hai. College working hours ke mutabiq yeh morning 9:00 AM se evening 5:00 PM tak open rehti hai. IEEE papers and high-speed Wi-Fi available hain.",
     locationDetails: {
       block: "Main Block",
       floor: "2nd Floor",
@@ -430,9 +430,35 @@ export const SLRTCE_KNOWLEDGE_BASE: SLRTCEKnowledgeRecord[] = [
       qrUri: "https://slrtce.in/facilities/central-library",
     },
     followUps: [
-      "Are visitors allowed in the reading hall?",
+      "What are the official college timings?",
       "How to access IEEE Digital Library?",
       "Directions to Central Library 2nd Floor",
+    ],
+  },
+  {
+    queryMatch: /college\s*time|college\s*timing|campus\s*hours|campus\s*time|working\s*hours|office\s*hours|schedule|timings?|hours?/i,
+    category: "facilities",
+    title: "SLRTCE College Working Hours (9:00 AM – 5:00 PM)",
+    replyEn: "Official college working hours at SLRTCE are 9:00 AM to 5:00 PM, Monday through Saturday. All academic departments, administrative counters, student inquiry desks, and library facilities operate during this schedule.",
+    replyHi: "SLRTCE का आधिकारिक समय सोमवार से शनिवार सुबह 9:00 बजे से शाम 5:00 बजे तक है। सभी शैक्षणिक विभाग, प्रशासनिक काउंटर, छात्र पूछताछ डेस्क और पुस्तकालय इसी समय में खुले रहते हैं।",
+    replyMr: "SLRTCE चे अधिकृत कामकाजाचे तास सोमवार ते शनिवार सकाळी 9:00 ते संध्याकाळी 5:00 पर्यंत आहेत. सर्व शैक्षणिक विभाग, प्रशासकीय कक्ष, विद्यार्थी चौकशी खिडकी आणि ग्रंथालय या वेळेत सुरू असतात.",
+    replyHinglish: "SLRTCE ke official college working hours Monday to Saturday subah 9:00 AM se sham 5:00 PM tak hain. Sabhi departments, administrative offices, student counters aur library isi time open rehte hain.",
+    locationDetails: {
+      block: "Main Campus & Admin Block",
+      floor: "Ground Floor & Upper Floors",
+      room: "All Academic & Administrative Sections",
+      landmark: "Operational across all campus blocks",
+      walkTime: "Across Campus",
+      waypointSteps: [
+        "Campus entrance gates are open for student entry from 8:30 AM.",
+        "Lectures, practical laboratories, and administrative counters operate from 9:00 AM to 5:00 PM.",
+      ],
+      qrUri: "https://slrtce.in/about/working-hours",
+    },
+    followUps: [
+      "Exam Cell working hours and location",
+      "Administrative counter verification timings",
+      "Central Library 2nd Floor directions",
     ],
   },
   {

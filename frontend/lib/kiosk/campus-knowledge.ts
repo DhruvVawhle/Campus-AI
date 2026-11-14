@@ -139,9 +139,9 @@ export const CAMPUS_RECORDS: GroundedCampusRecord[] = [
     queryMatch: /library|reading\s*hall|books|timings?/i,
     category: "facilities",
     title: "Central Library & Digital Reading Hall",
-    replyEn: "The Central Library operates from 8:00 AM to 8:00 PM on weekdays. The 2nd Floor Reading Hall stays open until 10:00 PM during examination weeks with full Wi-Fi and power hubs.",
-    replyHi: "सेंट्रल लाइब्रेरी कार्यदिवसों में सुबह 8:00 बजे से रात 8:00 बजे तक खुली रहती है। परीक्षा के दिनों में रीडिंग हॉल रात 10:00 बजे तक खुला रहता है।",
-    replyMr: "मध्यवर्ती ग्रंथालय कामकाजाच्या दिवशी सकाळी 8:00 ते रात्री 8:00 पर्यंत खुले असते. परीक्षेच्या काळात वाचन कक्ष रात्री 10:00 वाजेपर्यंत सुरू असतो.",
+    replyEn: "The Central Library operates during official college hours from 9:00 AM to 5:00 PM on weekdays with high-speed Wi-Fi and power hubs.",
+    replyHi: "सेंट्रल लाइब्रेरी कॉलेज के आधिकारिक समय में सुबह 9:00 बजे से शाम 5:00 बजे तक खुली रहती है।",
+    replyMr: "मध्यवर्ती ग्रंथालय अधिकृत कॉलेज वेळेत कामकाजाच्या दिवशी सकाळी 9:00 ते संध्याकाळी 5:00 पर्यंत सुरू असते.",
     followUps: [
       "Reading hall rules & timings",
       "Digital library & book search",

@@ -53,8 +53,8 @@ const SCENARIOS: QueryScenario[] = [
     routedAgent: "FacilitiesKnowledgeAgent",
     sourceFile: "backend/agents/reception_agent.py",
     queryType: "FAISS Vector RAG",
-    dataRecord: "FAISS top-k vector chunk: 'Central Library timings are 8:00 AM to 8:00 PM on weekdays. The 2nd floor Reading Hall remains open until 10:00 PM during exam weeks.'",
-    spokenReply: "मध्यवर्ती ग्रंथालय संध्याकाळी ८:०० वाजता बंद होते, तर परीक्षेच्या काळात दुसर्‍या मजल्यावरील वाचन कक्ष रात्री १०:०० वाजेपर्यंत सुरू असतो.",
+    dataRecord: "FAISS top-k vector chunk: 'Official college hours are 9:00 AM to 5:00 PM on weekdays. The Central Library and reading hall operate during these hours.'",
+    spokenReply: "कॉलेजची वेळ आणि मध्यवर्ती ग्रंथालय कामकाजाच्या दिवशी संध्याकाळी ५:०० वाजता बंद होते.",
   },
   {
     id: "exam-cell-hindi",
