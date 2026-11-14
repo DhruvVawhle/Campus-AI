@@ -517,7 +517,7 @@ export function KioskShell() {
   const hasTypedContent = typedMessage.trim().length > 0;
 
   return (
-    <div className="h-screen h-dvh max-h-screen max-h-dvh overflow-hidden bg-ground text-ink flex flex-col justify-between select-none">
+    <div className="h-screen h-dvh max-h-screen max-h-dvh overflow-hidden bg-ground text-ink flex flex-col justify-between">
       
       {/* 1. Top Institutional Masthead Header */}
       <header className="h-16 px-4 lg:px-6 bg-surface border-b border-line flex items-center justify-between shrink-0 shadow-2xs">
@@ -746,7 +746,6 @@ export function KioskShell() {
               
               <div>
                 <span className="text-base font-bold text-slrtce-navy block leading-tight">{t.liveAssistant}</span>
-                <span className="text-xs sm:text-sm text-secondary font-medium">SLRTCE Campus Terminal</span>
               </div>
             </div>
 
@@ -769,7 +768,7 @@ export function KioskShell() {
           </div>
 
           {/* Dialogue Area: Seamless Stream (Hero Welcome State OR Active Clean Stream) */}
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 scroll-slim py-2 pr-1">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 scroll-slim py-2 pr-1 select-text">
             {!hasActiveConversation ? (
               
               /* Hero Welcome State: Clean Architectural Layout (NO Card-in-Card, NO Uppercase Eyebrows) */
@@ -1128,7 +1127,7 @@ export function KioskShell() {
                     Technician Diagnostics & Kiosk Admin
                   </h3>
                   <span className="text-xs text-secondary font-medium">
-                    Shree L. R. Tiwari College of Engineering • Hardware Terminal
+                    Shree L. R. Tiwari College of Engineering
                   </span>
                 </div>
               </div>

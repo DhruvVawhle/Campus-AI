@@ -10,9 +10,9 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "CampusAI — SLRTCE Campus Terminal",
+  title: "CampusAI — Shree L. R. Tiwari College of Engineering",
   description:
-    "Zero-cost, voice-enabled interactive campus terminal powered by Groq Whisper, Llama 3.3 70B, FAISS vector RAG, and SQLite. Spoken guidance in English, Hindi, and Marathi.",
+    "Zero-cost, voice-enabled interactive institutional kiosk powered by Groq Whisper, Llama 3.3 70B, FAISS vector RAG, and SQLite. Spoken guidance in English, Hindi, and Marathi.",
 };
 
 export const viewport: Viewport = {
