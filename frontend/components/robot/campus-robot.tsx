@@ -222,17 +222,17 @@ export default function CampusRobot({ state = 'idle', distance = 10.5 }: { state
   const reduce = typeof window !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
   return (
     <Canvas
-      camera={{ position: [0, 0.1, distance], fov: 30 }}
+      camera={{ position: [0, 0.2, distance], fov: 30 }}
       gl={{ alpha: true, antialias: true }}
       dpr={[1, 2]}
       style={{ width: '100%', height: '100%', display: 'block', touchAction: 'none' }}
-      onCreated={({ camera }) => camera.lookAt(0, -0.25, 0)}
+      onCreated={({ camera }) => camera.lookAt(0, -0.45, 0)}
     >
       <hemisphereLight args={['#ffffff', '#aab1bf', 1.6]} />
       <directionalLight position={[3, 5, 7]} intensity={1.8} />
       <directionalLight position={[-4, 2, -3]} intensity={0.5} color="#ffd9c8" />
       <Robot state={state} reduce={reduce} />
-      <ContactShadows position={[0, -2.45, 0]} opacity={0.35} scale={6} blur={2.5} far={3} />
+      <ContactShadows position={[0, -2.0, 0]} opacity={0.25} scale={3.8} blur={2.2} far={2.5} />
     </Canvas>
   )
 }

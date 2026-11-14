@@ -232,7 +232,12 @@ export function KioskShell() {
       await conversation.answerVoiceEndToEnd(audio);
     },
     onListeningChange: (listening) => conversation.setListening(listening),
-    onError: (msg) => conversation.showError(msg),
+    onError: (msg) => {
+      if (/permission|not-allowed|denied|block/i.test(msg)) {
+        setMicPermitted(false);
+      }
+      conversation.showError(msg);
+    },
   });
 
   // Real-time streaming Speech-to-Text with Barge-In and Chimes
@@ -280,10 +285,14 @@ export function KioskShell() {
           }
         };
 
-        rec.onerror = () => {
+        rec.onerror = (err: any) => {
           setLiveInterim("");
           conversation.setListening(false);
-          voice.startRecording();
+          if (err?.error === "not-allowed" || err?.error === "service-not-allowed") {
+            setMicPermitted(false);
+          } else {
+            voice.startRecording();
+          }
         };
 
         rec.onend = () => {
@@ -763,7 +772,8 @@ export function KioskShell() {
                       </div>
                     )}
 
-                    <div className="absolute inset-1 rounded-full bg-[#FFFFFF] border border-[#E2DFD9]" aria-hidden="true" />
+                    {/* Seamless transparent pedestal without bright white box clash */}
+                    <div className="absolute inset-1 rounded-full bg-[#F6F5F2] border border-[#E2DFD9]" aria-hidden="true" />
 
                     <div className="relative w-full h-full z-10" aria-hidden="true">
                       <CampusRobot state={conversation.state} distance={8.5} />
@@ -798,7 +808,7 @@ export function KioskShell() {
                   </div>
                 )}
 
-                {/* Lower Half: 3 Large Touch Action Cards (No Empty Void) */}
+                {/* Lower Half: 3 Large Touch Action Cards with Specific Category Eyebrows */}
                 <div className="w-full mt-4 space-y-2">
                   <div className="text-xs font-bold text-[#1B365D] uppercase tracking-wider text-center">
                     {t.suggestedHeading}
@@ -812,17 +822,22 @@ export function KioskShell() {
                           key={quick.label}
                           type="button"
                           onClick={() => executeQuery(quick.prompt)}
-                          className="p-3 rounded-lg bg-[#FFFFFF] border border-[#E2DFD9] hover:border-[#7A1C24] hover:bg-[#FDF2F3] text-left motion-safe:transition-all focus-visible:outline-2 focus-visible:outline-[#7A1C24] cursor-pointer group flex flex-col justify-between min-h-[85px] shadow-2xs"
+                          className="p-3 rounded-lg bg-[#FFFFFF] border border-[#E2DFD9] hover:border-[#7A1C24] hover:bg-[#FDF2F3] text-left motion-safe:transition-all focus-visible:outline-2 focus-visible:outline-[#7A1C24] cursor-pointer group flex flex-col justify-between min-h-[90px] shadow-2xs"
                         >
-                          <div className="flex items-center gap-1.5 text-[#7A1C24] mb-1">
-                            <Icon className="w-4 h-4 shrink-0" />
-                            <span className="text-[11px] font-bold tracking-tight text-[#18181B] group-hover:text-[#7A1C24]">
-                              {quick.label}
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A1C24] bg-[#7A1C24]/10 px-1.5 py-0.5 rounded">
+                              {quick.eyebrow}
                             </span>
+                            <Icon className="w-3.5 h-3.5 text-[#7A1C24]" />
                           </div>
-                          <span className="text-[11px] font-medium text-[#52525B] leading-tight">
-                            {quick.subtitle}
-                          </span>
+                          <div>
+                            <div className="text-xs font-bold text-[#18181B] group-hover:text-[#7A1C24] leading-snug">
+                              {quick.label}
+                            </div>
+                            <div className="text-[11px] font-medium text-[#52525B] mt-1 leading-tight">
+                              {quick.subtitle}
+                            </div>
+                          </div>
                         </button>
                       );
                     })}
@@ -1038,11 +1053,11 @@ export function KioskShell() {
                 className={`w-11 h-11 rounded-md flex items-center justify-center shrink-0 motion-safe:transition-colors focus-visible:outline-2 focus-visible:outline-[#7A1C24] ${
                   hasTypedContent
                     ? "bg-[#7A1C24] text-[#FFFFFF] hover:bg-[#5C1319] cursor-pointer shadow-sm"
-                    : "bg-zinc-200 text-zinc-400 border border-zinc-300 opacity-60 cursor-not-allowed"
+                    : "bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed"
                 }`}
                 aria-label="Send inquiry"
               >
-                <FiSend className="w-4 h-4" aria-hidden="true" />
+                <FiSend className={`w-4 h-4 ${hasTypedContent ? "text-white" : "text-zinc-400"}`} aria-hidden="true" />
               </button>
             </form>
 

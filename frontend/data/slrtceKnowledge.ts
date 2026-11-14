@@ -123,18 +123,21 @@ export const SLRTCE_DIRECTORY: SLRTCEDirectoryTopic[] = [
 
 export const SLRTCE_QUICK_PROMPTS = [
   {
+    eyebrow: "WAYFINDING",
     label: "Locate a Faculty Cabin",
     prompt: "Where is Dr. Rajesh Sharma's cabin in West Wing?",
     icon: FiMapPin,
     subtitle: "HOD cabins & staff rooms across Block A & C",
   },
   {
+    eyebrow: "ADMISSIONS 2026",
     label: "2026 Admission Checklist",
     prompt: "What documents are needed for First Year Engineering admission?",
     icon: LuGraduationCap,
     subtitle: "CAP round eligibility, fees & required certificates",
   },
   {
+    eyebrow: "CAMPUS HOURS",
     label: "Today's Campus Hours",
     prompt: "When does the central library and reading hall open?",
     icon: FiInfo,
